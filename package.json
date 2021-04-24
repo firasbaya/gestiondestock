@@ -1,0 +1,22 @@
+{
+  "name": "gestiondestock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "expo-font": "^9.1.0",
+    "expo-sms": "^9.0.0",
+    "faker": "^5.5.3",
+    "native-base": "^2.15.2",
+    "react-async": "^10.0.1",
+    "react-native-get-sms-android": "^2.1.0",
+    "react-native-push-notification": "^7.2.3",
+    "react-native-sms": "^1.11.0",
+    "react-navigation": "^4.4.4"
+  }
+}
