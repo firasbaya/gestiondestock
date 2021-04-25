@@ -1,6 +1,8 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/user.controller.js");
 module.exports = function(app) {
+  var router=require("express").Router()
+
   app.use(function(req, res, next) {
     res.header(
       "Access-Control-Allow-Headers",
@@ -8,6 +10,7 @@ module.exports = function(app) {
     );
     next();
   });
+
 
   app.get("/api/test/all", controller.allAccess);
 

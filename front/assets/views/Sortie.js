@@ -95,7 +95,7 @@ Designation:'',
       
       async componentDidMount() {
 
-       await fetch ('http://192.168.1.9:8080/api/articles',{
+       await fetch ('http://192.168.1.2:8080/api/articles',{
         method:'get',
         mode:'no-cors',
         headers:{

@@ -41,9 +41,9 @@ search:'',
 isLoading:true,
 Cin:'',
 Nom:'',
-Adresse:'',
-Telephone:'',
-Email:'',
+Adresse:this.setState({Adresse:''}),
+Telephone:this.setState({Telephone:''}),
+Email:this.setState({Email:''}),
 modalVisible: false,
 
 };
@@ -66,30 +66,60 @@ Email:this.state.Email,
 }
 Alert.alert(
   "",
-  "Le Fournisseur" + " " + objet.Nom + ' a bien été modifié.' ,
+  "Le Fournisseur" + " " + this.props.route.params.item.Nom+ ' a bien été modifié.' ,
   [
     
     { text: "OK", onPress: () => console.log("OK Pressed") }
   ]
 );
   
+const _id=this.props.route.params.item._id;
+const apiUrl='http://192.168.1.2:8080/api/fournisseurs';
 
-fetch('http://192.168.1.10:8080/api/fournisseurs',{
-  method:'post',
+fetch(apiUrl + "/" + _id, {
+  method:'put',
   mode:'no-cors',
   headers:{
     'Accept':'application/json',
     'Content-Type':'application/json'
   },
   body:JSON.stringify({
-    Cin:objet.Cin,
-    Nom:objet.Nom,
     Adresse:objet.Adresse,
     Telephone:objet.Telephone,
     Email:objet.Email,
   })
 
 })}
+remove=()=>{
+  Alert.alert(
+    //title
+    'Confirmez votre choix',
+    //body
+    'Voulez-vous vraiment supprimer ce fournisseur?',
+    [
+      {
+        text: 'Confirmer',
+        onPress: () =>   fetch(apiUrl + "/" + _id, {
+          method: 'DELETE',
+          mode:'no-cors',
+        }).then(() => {
+           console.log('removed');
+        }).catch(err => {
+          console.error(err)
+        })
+      },
+      {
+        text: 'Annuler',
+        onPress: () => console.log('Cancel'), style: 'cancel'
+      },
+    ],
+    {cancelable: false},
+    //clicking out side of alert will not cancel
+  );
+
+  const _id=this.props.route.params.item._id;
+  const apiUrl='http://192.168.1.2:8080/api/fournisseurs';
+  }
 //change font
   /* constructor(){
     super()
@@ -116,9 +146,7 @@ fetch('http://192.168.1.10:8080/api/fournisseurs',{
      setModalVisible = (visible) => {
       this.setState({ modalVisible: visible });
     }
-  supprimer=()=>{
 
-  }
   
   
 /* componentDidMount() {
@@ -146,27 +174,7 @@ fetch('http://192.168.1.10:8080/api/fournisseurs',{
  render(){
    
   const { modalVisible } = this.state;
-  const alertSupprimer =() => {
-    Alert.alert(
-      //title
-      'Confirmez votre choix',
-      //body
-      'Voulez-vous vraiment supprimer ce fournisseur?',
-      [
-        {
-          text: 'Confirmer',
-          onPress: () => console.log('Fournisseur supprimer')
-        },
-        {
-          text: 'Annuler',
-          onPress: () => console.log('Cancel'), style: 'cancel'
-        },
-      ],
-      {cancelable: false},
-      //clicking out side of alert will not cancel
-    );
-  
-  }
+
     
     const position=new Animated.ValueXY({x:0,y:0})
     Animated.timing(position,{
@@ -298,6 +306,7 @@ source={require('../img/Client.png')}
              
               <TextInput 
                   label='Cin'
+                  editable={false}
                   value={this.props.route.params.item.Cin}
                   keyboardType='numeric'
                   onChangeText={this.onCinHandler}
@@ -319,6 +328,7 @@ source={require('../img/Client.png')}
     <TextInput
                   value={this.props.route.params.item.Nom}
                   label='Nom'
+                  editable={false}
                   onChangeText={this.onNomHandler}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}
               />          
@@ -339,7 +349,7 @@ source={require('../img/Client.png')}
                   defaultValue={this.props.route.params.item.Adresse}
                   label='Adresse'
                   onChangeText={this.onAdresseHandler}
-                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'black',borderBottomWidth:0.7}]}
+                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f',borderBottomWidth:0.7}]}
               />        
           
           <View style={[globalStyles.H,{marginLeft:30,marginTop:10}]}>
@@ -354,7 +364,7 @@ source={require('../img/Client.png')}
                   defaultValue={this.props.route.params.item.Telephone}
                   label='Telephone'
                   onChangeText={this.onTelephoneHandler}
-                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'black',borderBottomWidth:0.7}]}
+                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f',borderBottomWidth:0.7}]}
                   keyboardType='numeric'
                   />             
        
@@ -370,7 +380,7 @@ source={require('../img/Client.png')}
                   defaultValue={this.props.route.params.item.Email}
                   label='Email'
                   onChangeText={this.onEmailHandler}
-                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'black',borderBottomWidth:0.7}]}
+                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f',borderBottomWidth:0.7}]}
                   keyboardType='email-address'
                 />             
       
@@ -458,7 +468,7 @@ source={require('../img/Client.png')}
 
             <View style={[globalStyles.E,{width:140,backgroundColor:'#ffe268',borderColor:'#ffe268'}]}>
 <TouchableOpacity
-            onPress={alertSupprimer}>
+            onPress={()=>this.remove()}>
               
 <Text style={{textAlign:'center',fontSize:17,fontWeight:'bold',}}>Supprimer</Text>
             </TouchableOpacity>

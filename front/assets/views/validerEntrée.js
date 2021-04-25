@@ -71,24 +71,18 @@ class validerEntrée extends React.Component{
       { text: "OK", onPress: () => console.log("OK Pressed") }
     ]
   );
-       
-   fetch('http://192.168.1.9:8080/api/articles',{
-    method:'post',
+  const _id=this.props.route.params.item._id;
+  const apiUrl='http://192.168.1.2:8080/api/articles';
+  fetch(apiUrl + "/" + _id, {
+    method:'patch',
     mode:'no-cors',
     headers:{
       'Accept':'application/json',
       'Content-Type':'application/json'
     },
     body:JSON.stringify({
-      Designation:objet.Designation,
-      Marque:objet.Marque,
-      Categorie:objet.Categorie,
-      Id_fournisseur:objet.Id_fournisseur,
-      PrixAchat:objet.PrixAchat,
-      PrixVente:objet.PrixVente,
-      MaxRemise:objet.MaxRemise,
-      QuantiteAlerte:objet.QuantiteAlerte,
-      QuantiteArticle:objet.QuantiteArticle
+      QuantiteArticle:(this.QuantiteArticle+objet.QuantiteArticle)
+      
     })
 
   })}
@@ -172,7 +166,7 @@ source={require('../img/instock.png')}
                 </View>
                 <View style={[globalStyles.E,{width:180,backgroundColor:'#ffe268',borderColor:'#ffe268',marginTop:20,marginLeft:70}]}>
 <TouchableOpacity
-        onPress={this.handleEmail}>
+        onPress={()=>this.Submit()}>
 <Text style={{textAlign:'center',fontSize:17,fontWeight:'bold',}}>Ajouter</Text>
         </TouchableOpacity>
         </View>

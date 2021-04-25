@@ -128,7 +128,7 @@ async componentDidMount() {
     useNativeDriver: true
   }).start();
 
-await fetch ('http://192.168.1.9:8080/api/magasiniers',{
+await fetch ('http://192.168.1.2:8080/api/magasiniers',{
   method:'get',
   mode:'no-cors',
   headers:{

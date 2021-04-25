@@ -41,10 +41,10 @@ search:'',
 isLoading:true,
 Cin:'',
 Nom:'',
-Adresse:'',
-Téléphone:'',
-Email:'',
-Password:'',
+Adresse:this.setState({Adresse:''}),
+Téléphone:this.setState({Telephone:''}),
+Email:this.setState({Email:''}),
+Password:this.setState({Password:''}),
 modalVisible: false,
 
 };
@@ -59,8 +59,6 @@ this.onPasswordHandler= (Password) => this.setState({Password});
 
 Submit (){
 const objet={   
-Cin:this.state.Cin,
-Nom:this.state.Nom,
 Adresse:this.state.Adresse,
 Téléphone:this.state.Téléphone,
 Email:this.state.Email,
@@ -75,9 +73,10 @@ Alert.alert(
     { text: "OK", onPress: () => console.log("OK Pressed") }
   ]
 );
-  
+const _id=this.props.route.params.item._id;
+const apiUrl='http://192.168.1.2:8080/api/magasiniers';
 
-fetch('http://192.168.1.10:8080/api/magasiniers',{
+fetch(apiUrl + "/" + _id, {
   method:'post',
   mode:'no-cors',
   headers:{
@@ -85,8 +84,7 @@ fetch('http://192.168.1.10:8080/api/magasiniers',{
     'Content-Type':'application/json'
   },
   body:JSON.stringify({
-    Cin:objet.Cin,
-    Nom:objet.Nom,
+   
     Adresse:objet.Adresse,
     Téléphone:objet.Téléphone,
     Email:objet.Email,
@@ -94,6 +92,18 @@ fetch('http://192.168.1.10:8080/api/magasiniers',{
   })
 
 })}
+remove(){
+  const _id=this.props.route.params.item._id;
+   const apiUrl='http://192.168.1.2:8080/api/magasiniers';
+  fetch(apiUrl + "/" + _id, {
+    method: 'DELETE',
+    mode:'no-cors',
+  }).then(() => {
+     console.log('removed');
+  }).catch(err => {
+    console.error(err)
+  });
+}
 //change font
   /* constructor(){
     super()
@@ -299,6 +309,7 @@ source={require('../img/Client.png')}
              
               <TextInput 
                   label='Cin'
+                  editable={false}
                   value={this.props.route.params.item.Cin}
                   keyboardType='numeric'
                   onChangeText={this.onCinHandler}
@@ -320,6 +331,7 @@ source={require('../img/Client.png')}
     <TextInput
                   value={this.props.route.params.item.Nom}
                   label='Nom'
+                  editable={false}
                   onChangeText={this.onNomHandler}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}
               />  

@@ -122,7 +122,7 @@ renderSeparator =() => {
 }
 
 componentDidMount() {
-fetch ('http://192.168.1.10:8080/api/depenses',{
+fetch ('http://192.168.1.2:8080/api/depenses',{
   method:'get',
   mode:'no-cors',
   headers:{

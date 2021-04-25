@@ -3,29 +3,23 @@ module.exports = mongoose => {
     
       {  Cin:{
         type:String,
-        required:true
       },
         Nom:{
           type:String,
-          required:true
         },
         Adresse:{
           type:String,
-          required:true
         },
         Telephone:{
           type:String,
-          required:true
         },
         Email:{
           type:String,
-          required:true
         },
       
         Crédit:{
-          type:Number,
-          default:0,
-          required:false
+          type:String,
+          default:'0',
         },
 
         published:Boolean

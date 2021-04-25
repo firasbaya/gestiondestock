@@ -29,8 +29,9 @@ class DétailClient extends React.Component{
 
 /*     this.modifier = this.modifier.bind(this);
 this.state = { isModalOpen: false */
-
-    this.delayValue = 8000;
+  
+  this.delayValue = 8000;
+  
     this.state = {
 
       animatedValue: new Animated.Value(0),
@@ -41,10 +42,10 @@ search:'',
 isLoading:true,
 Cin:'',
 Nom:'',
-Adresse:'',
-Telephone:'',
-Email:'',
-Crédit:'',
+Adresse:this.setState({Adresse:''}),
+Telephone:this.setState({Telephone:''}),
+Email:this.setState({Email:''}),
+Crédit:this.setState({Crédit:''}),
 modalVisible: false,
 
 };
@@ -55,9 +56,13 @@ this.onAdresseHandler= (Adresse) => this.setState({Adresse});
 this.onTelephoneHandler= (Telephone) => this.setState({Telephone});
 this.onEmailHandler= (Email)=> this.setState({Email});
 this.onCréditHandler=(Crédit)=> this.setState({Crédit});
+
 }
 
+
 Submit (){
+
+ 
 const objet={   
 Cin:this.state.Cin,
 Nom:this.state.Nom,
@@ -76,24 +81,39 @@ Alert.alert(
   ]
 );
   
+//fetch(`http://192.168.1.10:8080/api/clients/60835fc075e2b00a44521166`,{
 
-fetch('http://192.168.1.10:8080/api/clients',{
-  method:'post',
+  const _id=this.props.route.params.item._id;
+  const apiUrl='http://192.168.1.2:8080/api/clients';
+  
+  fetch(apiUrl + "/" + _id, {
+  method:'put',
   mode:'no-cors',
   headers:{
     'Accept':'application/json',
     'Content-Type':'application/json'
   },
   body:JSON.stringify({
-    Cin:objet.Cin,
-    Nom:objet.Nom,
     Adresse:objet.Adresse,
     Telephone:objet.Telephone,
     Email:objet.Email,
     Crédit:objet.Crédit,
+    
   })
 
 })}
+remove(){
+  const _id=this.props.route.params.item._id;
+   const apiUrl='http://192.168.1.2:8080/api/clients';
+  fetch(apiUrl + "/" + _id, {
+    method: 'DELETE',
+    mode:'no-cors',
+  }).then(() => {
+     console.log('removed');
+  }).catch(err => {
+    console.error(err)
+  });
+}
 //change font
   /* constructor(){
     super()
@@ -302,6 +322,7 @@ source={require('../img/Client.png')}
                   value={this.props.route.params.item.Cin}
                   keyboardType='numeric'
                   onChangeText={this.onCinHandler}
+                  editable={false}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}
                   
 />
@@ -318,8 +339,9 @@ source={require('../img/Client.png')}
 
     </View>
     <TextInput
-                  value={this.props.route.params.item.Nom}
+                  defaultValue={this.props.route.params.item.Nom}
                   label='Nom'
+                  editable={false}
                   onChangeText={this.onNomHandler}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}
               />          
@@ -340,7 +362,7 @@ source={require('../img/Client.png')}
                   defaultValue={this.props.route.params.item.Adresse}
                   label='Adresse'
                   onChangeText={this.onAdresseHandler}
-                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'black',borderBottomWidth:1}]}
+                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f',borderBottomWidth:1}]}
               />        
           
           <View style={[globalStyles.H,{marginLeft:30,marginTop:10}]}>
@@ -355,7 +377,7 @@ source={require('../img/Client.png')}
                   defaultValue={this.props.route.params.item.Telephone}
                   label='Telephone'
                   onChangeText={this.onTelephoneHandler}
-                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'black',borderBottomWidth:1}]}
+                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f',borderBottomWidth:1}]}
                   keyboardType='numeric'
                   />             
        
@@ -371,7 +393,8 @@ source={require('../img/Client.png')}
                   defaultValue={this.props.route.params.item.Email}
                   label='Email'
                   onChangeText={this.onEmailHandler}
-                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'black',borderBottomWidth:1}]}
+                  //onChangeText={(text) => this.change(text)}
+                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f',borderBottomWidth:1}]}
                   keyboardType='email-address'
                 />             
       
@@ -384,11 +407,11 @@ source={require('../img/Client.png')}
       </View>
          
                 <TextInput
-                  defaultValue={this.props.route.params.item.Crédit.toString()}
+                  defaultValue={this.props.route.params.item.Crédit}
                   label='Crédit'
                   keyboardType='numeric'
                   onChangeText={this.onCréditHandler}
-                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'black',borderBottomWidth:1}]}
+                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f',borderBottomWidth:1}]}
                 />
 </View>
    
@@ -450,7 +473,7 @@ source={require('../img/Client.png')}
                 />
                 <Text style={[globalStyles.sousTitre1,{color:'#ff8303'}]}>Téléphone:</Text>
               </View>
-              <Text style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}> {this.props.route.params.item.Telephone.toString()} </Text>
+              <Text style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}> {this.props.route.params.item.Telephone} </Text>
               <View style={{height:1,width:'100%',backgroundColor:'#ccc',marginBottom:5,marginTop:7}}></View>
 <View style={[globalStyles.H,{marginLeft:30}]}>
                 <Image
@@ -468,7 +491,7 @@ source={require('../img/Client.png')}
                 />
                 <Text style={[globalStyles.sousTitre1,{color:'#ff8303'}]}>Crédit:</Text>
               </View>
-              <Text style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}> {this.props.route.params.item.Crédit.toString()} </Text>
+              <Text style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}> {this.props.route.params.item.Crédit} </Text>
 
     </View>
     <View style={[globalStyles.H,{justifyContent:'center',marginTop:20}]}>
@@ -482,7 +505,7 @@ source={require('../img/Client.png')}
 
             <View style={[globalStyles.E,{width:140,backgroundColor:'#ffe268',borderColor:'#ffe268'}]}>
 <TouchableOpacity
-         onPress={alertSupprimer}>              
+         onPress={()=>this.remove()}>              
 <Text style={{textAlign:'center',fontSize:17,fontWeight:'bold',}}>Supprimer</Text>
             </TouchableOpacity>
             </View>

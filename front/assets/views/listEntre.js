@@ -153,7 +153,7 @@ componentDidMount() {
    useNativeDriver: true
  }).start();
 
-fetch ('http://192.168.1.10:8080/api/entres',{
+fetch ('http://192.168.1.2:8080/api/entres',{
   method:'get',
   mode:'no-cors',
   headers:{

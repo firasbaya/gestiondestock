@@ -81,7 +81,7 @@ const validationSchema = yup.object().shape({
 
 
 
-   fetch('http://192.168.1.9:8080/api/fournisseurs',{
+   fetch('http://192.168.1.2:8080/api/fournisseurs',{
     method:'post',
     mode:'no-cors',
     headers:{

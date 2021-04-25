@@ -72,7 +72,7 @@ class validerSortie extends React.Component{
     ]
   );
        
-   fetch('http://192.168.1.10:8080/api/articles',{
+   fetch('http://192.168.1.2:8080/api/articles',{
     method:'post',
     mode:'no-cors',
     headers:{

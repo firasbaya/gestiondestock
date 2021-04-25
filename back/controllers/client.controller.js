@@ -2,7 +2,7 @@ const db = require("../models");
 const Client = db.clients;
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.Cin) {
+/*   if (!req.body.Cin) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
@@ -21,7 +21,7 @@ exports.create = (req, res) => {
   if (!req.body.Email) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
-  }
+  } */
 
 /*   if (!req.body.Crédit) {
     res.status(400).send({ message: "Content can not be empty!" });

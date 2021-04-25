@@ -1,29 +1,21 @@
 import * as React from 'react';
 import {
   StyleSheet,
-
   Image,
   View,
   TouchableOpacity,
   Text,
   ImageBackground,
-  ActivityIndicator,
   Animated,
   Modal,
-  Pressable,
-  Button,
   TextInput,
   Alert,
-  Input,
-  Linking
+
 } from 'react-native'
 //import * as Font from 'expo-font';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../Model/globalStyles';
 import TextAnimator from '../Model/TextAnimator';
-import * as SMS from 'expo-sms';
-import email from 'react-native-email'
 
 
 class DétailArticle extends React.Component{
@@ -45,15 +37,14 @@ isLoading:true,
 Designation:'',
 Marque:'',
 Categorie:'',
-Id_fournisseur:'',
-PrixAchat:'',
-PrixVente:'',
-MaxRemise:'',
-QuantiteAlerte:'',
-QuantiteArticle:'',
+Id_fournisseur:this.setState({Id_fournisseur:''}),
+PrixAchat:this.setState({PrixAchat:''}),
+PrixVente:this.setState({PrixVente:''}),
+MaxRemise:this.setState({MaxRemise:''}),
+QuantiteAlerte:this.setState({QuantiteAlerte:''}),
+QuantiteArticle:this.setState({QuantiteArticle:''}),
 modalVisible: false,
 modalCommanderVisible: false,
-_id:''
 };
 this.Submit=this.Submit.bind(this);
 this.onDesginationHandler= (Designation) => this.setState({Designation});
@@ -78,7 +69,6 @@ Submit (){
   MaxRemise:this.state.MaxRemise,
   QuantiteAlerte:this.state.QuantiteAlerte,
   QuantiteArticle:this.state.QuantiteArticle,
-  _id:''
 
 }
 Alert.alert(
@@ -91,8 +81,10 @@ Alert.alert(
   ]
 );
   
+const _id=this.props.route.params.item._id;
+const apiUrl='http://192.168.1.2:8080/api/articles';
 
-fetch(`http://192.168.1.9:8080/api/articles/${id}`,{
+fetch(apiUrl + "/" + _id, {
   method:'put',
   mode:'no-cors',
   headers:{
@@ -100,9 +92,7 @@ fetch(`http://192.168.1.9:8080/api/articles/${id}`,{
     'Content-Type':'application/json'
   },
   body:JSON.stringify({
-    Designation:objet.Designation,
-    Marque:objet.Marque,
-    Categorie:objet.Categorie,
+  
     Id_fournisseur:objet.Id_fournisseur,
     PrixAchat:objet.PrixAchat,
     PrixVente:objet.PrixVente,
@@ -114,28 +104,37 @@ fetch(`http://192.168.1.9:8080/api/articles/${id}`,{
 })
 }
 
-//change font
-  /* constructor(){
-    super()
-    this.state={
-      fontLoaded:false
-    }
-  }
-  async componentDidMount(){
-    await Font.loadAsync({
-      'ZenDots-Regular':require('../Fonts/ZenDots-Regular.ttf')
-    })
-    this.setState({fontLoaded:true});
-  } */
-//var Name=req.body.Name;
- /*  modifier = () => {
+remove=()=>{
+  Alert.alert(
+    //title
+    'Confirmez votre choix',
+    //body
+    'Voulez-vous vraiment supprimer cet article?',
+    [
+      {
+        text: 'Confirmer',
+        onPress: () =>   fetch(apiUrl + "/" + _id, {
+          method: 'DELETE',
+          mode:'no-cors',
+        }).then(() => {
+           console.log('removed');
+        }).catch(err => {
+          console.error(err)
+        })
+      },
+      {
+        text: 'Annuler',
+        onPress: () => console.log('Cancel'), style: 'cancel'
+      },
+    ],
+    {cancelable: false},
+    //clicking out side of alert will not cancel
+  );
 
-    const { isModalOpen } = this.state; this.setState({ isModalOpen: !isModalOpen });
- */
-  /*  db.collection('clients').updateOne({"Name":Name},function (err,result){
-     console.log('updated')
-    */
-   
+
+ .3
+}
+
 
      setModalVisible = (visible) => {
       this.setState({ modalVisible: visible });
@@ -164,50 +163,9 @@ fetch(`http://192.168.1.9:8080/api/articles/${id}`,{
     console.log(status);
 };
 
-/* componentDidMount() {
-s
- fetch ('http://192.168.1.8:8080/api/clients/id',{
- method:'delete',
- mode:'no-cors',
- headers:{
- 'Accept':'application/json',
- 'Content-Type':'application/json'
- },
 
-})
- 
-.then((response) => response.json())
-.then((responseJson) => {
- this.setState({
-   dataSource:responseJson
- })
-})
-.catch((error) =>{
- console.log(error)
-}
-)} */
  render(){
-  const alertSupprimer =() => {
-    Alert.alert(
-      //title
-      'Confirmez votre choix',
-      //body
-      'Voulez-vous vraiment supprimer cet article?',
-      [
-        {
-          text: 'Confirmer',
-          onPress: () => console.log('Article supprimer')
-        },
-        {
-          text: 'Annuler',
-          onPress: () => console.log('Cancel'), style: 'cancel'
-        },
-      ],
-      {cancelable: false},
-      //clicking out side of alert will not cancel
-    );
-  
-  }
+ 
     
   const { modalVisible } = this.state;
   const { modalCommanderVisible } = this.state;
@@ -324,7 +282,7 @@ style={{width:150,height:150,borderRadius:50}}
 source={require('../img/Articleimagee.jpg')}                    />
            </Animated.View>
      
-<View style={{height:1050,padding:20,}}>
+<View style={{height:1060,padding:20,}}>
 
 {/* {this.state.fontLoaded?(
  */}    
@@ -346,12 +304,14 @@ source={require('../img/Articleimagee.jpg')}                    />
              
               <TextInput 
                   label='Désignation'
+                  editable={false}
                   defaultValue={this.props.route.params.item.Designation}
                   onChangeText={this.onDesignationHandler}
-                  style={[globalStyles.TextInput,{fontSize:20,fontWeight:'bold'}]}
+                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:30,color:'#31326f'}]}
                   
 />
 
+<View style={{height:1,width:'100%',backgroundColor:'#ccc',marginBottom:5,marginTop:7}}></View>
 
 
     <View style={[globalStyles.H,{marginLeft:30,marginTop:10}]}>
@@ -364,10 +324,13 @@ source={require('../img/Articleimagee.jpg')}                    />
     </View>
     <TextInput
                   label='Marque'
+                  editable={false}
                   defaultValue={this.props.route.params.item.Marque}
                   onChangeText={this.onMarqueHandler}
-                  style={[globalStyles.TextInput,{fontSize:20,fontWeight:'bold',marginRight:15,color:'#31326f'}]}
-              />          
+                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:30,color:'#31326f'}]}
+              />        
+              <View style={{height:1,width:'100%',backgroundColor:'#ccc',marginBottom:5,marginTop:7}}></View>
+  
           <View style={[globalStyles.H,{marginLeft:30,marginTop:10}]}>
                 <Image
                       style={globalStyles.icon}
@@ -382,10 +345,12 @@ source={require('../img/Articleimagee.jpg')}                    />
                <TextInput
                   defaultValue={this.props.route.params.item.Categorie}
                   label='Catégorie'
+                  editable={false}
                   onChangeText={this.onCategorieHandler}
-                  style={[globalStyles.TextInput,{fontSize:20,fontWeight:'bold'}]}
+                  style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:30,color:'#31326f'}]}
               />        
-          
+                        <View style={{height:1,width:'100%',backgroundColor:'#ccc',marginBottom:5,marginTop:7}}></View>
+
           <View style={[globalStyles.H,{marginLeft:30,marginTop:10}]}>
                 <Image
                       style={globalStyles.icon}
@@ -485,7 +450,7 @@ source={require('../img/Articleimagee.jpg')}                    />
             
             <TouchableOpacity onPress={() => this.Submit()}>
             
-              <Text style={{textAlign:'center',fontSize:17,fontWeight:'bold',backgroundColor:'#ff8303'}}>Modifier</Text>
+              <Text style={{textAlign:'center',fontSize:17,fontWeight:'bold',backgroundColor:'#ff8303'}}>Sauvegarder</Text>
             
             </TouchableOpacity>
     </View>
@@ -717,8 +682,8 @@ source={{uri:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMTEhU
 
             <View style={[globalStyles.E,{width:140,backgroundColor:'#ffe268',borderColor:'#ffe268'}]}>
 <TouchableOpacity
-            onPress={alertSupprimer}>
-<Text style={{textAlign:'center',fontSize:17,fontWeight:'bold',}}>Supprimer</Text>
+            onPress={()=>this.remove()}>
+            <Text style={{textAlign:'center',fontSize:17,fontWeight:'bold',}}>Supprimer</Text>
             </TouchableOpacity>
             </View>
             
