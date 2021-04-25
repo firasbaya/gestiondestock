@@ -71,7 +71,6 @@ class validerEntrée extends React.Component{
       { text: "OK", onPress: () => console.log("OK Pressed") }
     ]
   );
-  const _id=this.props.route.params.item._id;
   const apiUrl='http://192.168.1.2:8080/api/articles';
   fetch(apiUrl + "/" + _id, {
     method:'patch',
