@@ -30,37 +30,44 @@ class validerEntrée extends React.Component{
     
         this.state = {
           Designation:'',
-          Marque:'',
-          Categorie:'',
-          Id_fournisseur:'',
-          PrixAchat:'',
-          PrixVente:'',
-          MaxRemise:'',
-          QuantiteAlerte:'',
-          QuantiteArticle:''
+          QuantiteArticle:'',
+          dataSource : [],
         };
     
     this.Submit=this.Submit.bind(this);
     this.onDesginationHandler= (Designation) => this.setState({Designation});
-    this.onMarqueHandler= (Marque) => this.setState({Marque});
-    this.onId_fournisseurHandler= (Id_fournisseur) => this.setState({Id_fournisseur});
-    this.onCategorieHandler= (Categorie)=> this.setState({Categorie});
-    this.onPrixAchatHandler= (PrixAchat)=> this.setState({PrixAchat});
-    this.onPrixVenteHandler= (PrixVente) => this.setState({PrixVente});
-    this.onMaxRemiseHandler= (MaxRemise) => this.setState({MaxRemise});
-    this.onQuantiteAlerteHandler= (QuantiteAlerte) => this.setState({QuantiteAlerte});
     this.onQuantiteArticleHandler= (QuantiteArticle) => this.setState({QuantiteArticle});
     }
+    componentDidMount()
+    {  
+      this.getData()
+    }
+    getData = async () => {
+      const _id=this.props.route.params.item._id;
+  const apiUrl='http://192.168.1.2:8080/api/articles';
+   await fetch(apiUrl + "/" + _id, {
+    method:'get',
+    mode:'no-cors',
+    headers:{
+      'Accept':'application/json',
+      'Content-Type':'application/json'
+    }
+   
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        dataSource:responseJson
+      })
+    })
+    .catch((error) =>{
+      console.log(error)
+    })
+
+  }
     Submit (){
       const  objet={   
       Designation:this.state.Designation,
-      Marque:this.state.Marque,
-      Categorie:this.state.Categorie,
-      Id_fournisseur:this.state.Id_fournisseur,
-      PrixAchat:this.state.PrixAchat,
-      PrixVente:this.state.PrixVente,
-      MaxRemise:this.state.MaxRemise,
-      QuantiteAlerte:this.state.QuantiteAlerte,
       QuantiteArticle:this.state.QuantiteArticle,
    }
    Alert.alert(
@@ -71,20 +78,22 @@ class validerEntrée extends React.Component{
       { text: "OK", onPress: () => console.log("OK Pressed") }
     ]
   );
+  const _id=this.props.route.params.item._id;
   const apiUrl='http://192.168.1.2:8080/api/articles';
   fetch(apiUrl + "/" + _id, {
-    method:'patch',
+    method:'put',
     mode:'no-cors',
     headers:{
       'Accept':'application/json',
       'Content-Type':'application/json'
     },
     body:JSON.stringify({
-      QuantiteArticle:(this.QuantiteArticle+objet.QuantiteArticle)
-      
+      QuantiteArticle: Number(objet.QuantiteArticle) + this.state.dataSource.QuantiteArticle
     })
+  })
+  this.getData();
 
-  })}
+}
     render(){
         const position=new Animated.ValueXY({x:0,y:0})
         Animated.timing(position,{
@@ -178,5 +187,6 @@ source={require('../img/instock.png')}
         )
     }
 }
+
 
 export default validerEntrée;

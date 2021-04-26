@@ -30,37 +30,16 @@ class validerSortie extends React.Component{
     
         this.state = {
           Designation:'',
-          Marque:'',
-          Categorie:'',
-          Id_fournisseur:'',
-          PrixAchat:'',
-          PrixVente:'',
-          MaxRemise:'',
-          QuantiteAlerte:'',
           QuantiteArticle:''
         };
     
     this.Submit=this.Submit.bind(this);
     this.onDesginationHandler= (Designation) => this.setState({Designation});
-    this.onMarqueHandler= (Marque) => this.setState({Marque});
-    this.onId_fournisseurHandler= (Id_fournisseur) => this.setState({Id_fournisseur});
-    this.onCategorieHandler= (Categorie)=> this.setState({Categorie});
-    this.onPrixAchatHandler= (PrixAchat)=> this.setState({PrixAchat});
-    this.onPrixVenteHandler= (PrixVente) => this.setState({PrixVente});
-    this.onMaxRemiseHandler= (MaxRemise) => this.setState({MaxRemise});
-    this.onQuantiteAlerteHandler= (QuantiteAlerte) => this.setState({QuantiteAlerte});
     this.onQuantiteArticleHandler= (QuantiteArticle) => this.setState({QuantiteArticle});
     }
     Submit (){
       const  objet={   
       Designation:this.state.Designation,
-      Marque:this.state.Marque,
-      Categorie:this.state.Categorie,
-      Id_fournisseur:this.state.Id_fournisseur,
-      PrixAchat:this.state.PrixAchat,
-      PrixVente:this.state.PrixVente,
-      MaxRemise:this.state.MaxRemise,
-      QuantiteAlerte:this.state.QuantiteAlerte,
       QuantiteArticle:this.state.QuantiteArticle,
    }
    Alert.alert(
@@ -72,23 +51,17 @@ class validerSortie extends React.Component{
     ]
   );
        
-   fetch('http://192.168.1.2:8080/api/articles',{
-    method:'post',
+  const _id=this.props.route.params.item._id;
+  const apiUrl='http://192.168.1.2:8080/api/articles';
+  fetch(apiUrl + "/" + _id, {
+    method:'put',
     mode:'no-cors',
     headers:{
       'Accept':'application/json',
       'Content-Type':'application/json'
     },
     body:JSON.stringify({
-      Designation:objet.Designation,
-      Marque:objet.Marque,
-      Categorie:objet.Categorie,
-      Id_fournisseur:objet.Id_fournisseur,
-      PrixAchat:objet.PrixAchat,
-      PrixVente:objet.PrixVente,
-      MaxRemise:objet.MaxRemise,
       QuantiteAlerte:objet.QuantiteAlerte,
-      QuantiteArticle:objet.QuantiteArticle
     })
 
   })}

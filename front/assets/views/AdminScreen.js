@@ -32,51 +32,61 @@ class AdminScreen extends React.Component{
 			email:'',
 			password:''
 		}
+    this.login = this.login.bind(this)
 	}
   login = () =>{
 		const {email,password} = this.state;
 		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
-		if(email==""){
-			//alert("Please enter Email address");
+    if(email==""){
+			alert("Please enter Email address");
 		  this.setState({email:'Entrez votre E-mail'})
 			
 		}
 		
 		else if(reg.test(email) === false)
 		{
-		//alert("Email is Not Correct");
+		alert("Email is Not Correct");
 		this.setState({email:'Email incorrecte'})
 		return false;
 		  }
 
-		else if(password==""){
+		else if(password===""){
 		this.setState({email:'Entrez votre mot de passe'})
 		}
 		else{
-		
-		fetch('http://192.168.1.9:8080/api/auth/signin',{
-			method:'post',
-      method:'no-cors',
-			header:{
-				'Accept':'application/json',
-				'Content-type':'application/json'
-			},
+  
+		fetch('http://192.168.1.2:8080/api/auth/signin',{
+      method:'post',
+      mode:'no-cors',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      },
 			body:JSON.stringify({
 				// we will pass our input data to server
-				email,
-				password
+				email ,
+				password 
 			})
 			
 		})
 		.then((response) => response.json())
 		 .then((responseJson)=>{
-			 if(responseJson == "ok"){
-				 // redirect to profile page
-				 alert("Successfully Login");
-				 this.props.navigation.navigate("Home");
-			 }else{
-				 alert("Wrong Login Details");
-			 }
+        console.log(responseJson.message)
+        if (responseJson.message === "User Not found.")
+        {
+          alert("Verify email")
+        }
+       else if (responseJson.message === "Invalid Password!")
+        {
+          alert("Verify password")
+        }
+       else
+      {
+          // redirect to profile page
+          alert("Successfully Login");
+          this.props.navigation.navigate("Home");
+      }
+       
 		 })
 		 .catch((error)=>{
 		 console.error(error);
@@ -157,7 +167,7 @@ class AdminScreen extends React.Component{
                   ) : (
                     <TouchableOpacity
                     //onPress={this.login}
-                   onPress={()=>this.props.navigation.navigate('Home')}
+                   onPress={this.login}
                    >
                       <Text style={globalStyles.textIdent}>S'identifier</Text>
                     </TouchableOpacity>

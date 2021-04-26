@@ -69,7 +69,7 @@ Alert.alert(
     { text: "OK", onPress: () => console.log("OK Pressed") }
   ]
 );
-fetch('http://192.168.1.9:8080/api/auth/signup',{
+fetch('http://192.168.1.2:8080/api/auth/signup',{
   method:'post',
   mode:'no-cors',
   headers:{
