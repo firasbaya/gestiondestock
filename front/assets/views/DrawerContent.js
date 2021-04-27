@@ -14,16 +14,52 @@ import {
     TouchableRipple,
     Switch,
 }from 'react-native-paper';
+import { Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+
+import * as Font from 'expo-font';
 
 export function DrawerContent(props){
-  
+    const [data, setData] = React.useState([]);
+ 
+
     const [isDarkTheme,setIsDarkTheme]=React.useState(false);
     const toggleTheme=() =>{
         setIsDarkTheme(!isDarkTheme);              
         }
-    
+         function loadText(){
+
+            fetch('http://192.168.1.4:8080/api/articles/6081ef5799ccb160accc3a2e')
+            .then((response) => response.json())
+           /*  .then((responseJson) => {
+                Designatio=responseJson.Designation
+                console.log(Designatio)
+            }) */
+            .then((data) => {
+                setData(data);
+                console.log(data)
+              })
+            .catch((error) =>{
+              console.log(error)
+            }
+            ) }
+     
+            /*      .then((response) => response.json())
+              .then((responseJson) => {
+                return (
+                  console.log(responseJson)
+                );
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+              
+          } */
+        
     return(
+        
         <View style={{flex:1}}>
 <DrawerContentScrollView {...props}>
     <View style={styles.drawerContent}>
@@ -36,7 +72,9 @@ export function DrawerContent(props){
                 size={50}
                 />
                 <View style={{marginLeft:15,flexDirection:'column'}}>
-                    <Title style={styles.title}>Emir Gribaa</Title>
+                 
+    
+                    <Title style={styles.title}>{data.Designation}</Title>
                     <Caption style={styles.caption}>Zagalawlaw</Caption>
                 </View>
             </View>
@@ -47,7 +85,7 @@ export function DrawerContent(props){
            
            <DrawerItem
            icon={({color,size})=> (
-               <Icon 
+               <MaterialCommunityIcons
                name="home-outline"
                color={color}
                size={size}               
@@ -60,7 +98,7 @@ export function DrawerContent(props){
 
 <DrawerItem
     icon={({color,size})=> (
-        <Icon 
+        <MaterialCommunityIcons 
         name="account-multiple-plus-outline"
         color={color}
         size={size}
@@ -73,7 +111,7 @@ export function DrawerContent(props){
 />
 <DrawerItem
     icon={({color,size})=> (
-        <Icon 
+        <MaterialCommunityIcons 
         name="bell-outline"
         color={color}
         size={size}
@@ -86,7 +124,7 @@ export function DrawerContent(props){
 />
 <DrawerItem
     icon={({color,size})=> (
-        <Icon 
+        <MaterialCommunityIcons 
         name="chat-processing-outline"
         color={color}
         size={size}
@@ -99,7 +137,7 @@ export function DrawerContent(props){
 />
 <DrawerItem
     icon={({color,size})=> (
-        <Icon 
+        <MaterialCommunityIcons
         name="help-circle-outline"
         color={color}
         size={size}
@@ -130,7 +168,7 @@ export function DrawerContent(props){
 <Drawer.Section style={StyleSheet.bottomDrawerSection}>
 <DrawerItem
     icon={({color,size})=> (
-        <Icon 
+        <MaterialCommunityIcons
         name="exit-to-app"
         color={color}
         size={size}
@@ -145,7 +183,9 @@ export function DrawerContent(props){
 </Drawer.Section>
         </View>
     );
+    
 }
+
 const styles=StyleSheet.create({
     DrawerContent:{
         flex:1,

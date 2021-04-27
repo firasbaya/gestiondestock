@@ -2,9 +2,6 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Fournisseur from './Fournisseur';
-import listFournisseur from './listFournisseur';
-
-import { StyleSheet} from 'react-native';
 import FournisseurStack from './FournisseurStack';
 const Tab = createMaterialTopTabNavigator()
 
@@ -45,7 +42,4 @@ class FournisseurNav extends React.Component{
     </NavigationContainer>
   );
 }}
-const styles=StyleSheet.create({
-
-});
 export default FournisseurNav;

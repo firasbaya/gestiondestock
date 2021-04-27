@@ -25,6 +25,77 @@ const validationSchema = yup.object().shape({
 });
 
 class MagasinierScreen extends React.Component{
+  constructor(props){
+		super(props)
+		this.state={
+			email:'',
+			password:''
+		}
+    this.login = this.login.bind(this)
+	}
+
+  login = async () =>{
+		const {email,password} = this.state;
+		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    if(email==""){
+			alert("Please enter Email address");
+		  this.setState({email:'Entrez votre E-mail'})
+			
+		}
+		
+		else if(reg.test(email) === false)
+		{
+		alert("Email is Not Correct");
+		this.setState({email:'Email incorrecte'})
+		return false;
+		  }
+
+		else if(password===""){
+		this.setState({email:'Entrez votre mot de passe'})
+		}
+		else{
+  
+		await fetch('http://192.168.1.2:8080/api/auth/signin',{
+      method:'post',
+      mode:'no-cors',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      },
+			body:JSON.stringify({
+				// we will pass our input data to server
+				email ,
+				password 
+			})
+			
+		})
+		.then((response) => response.json())
+		 .then((responseJson)=>{
+        console.log(responseJson.message)
+        if (responseJson.message === "User Not found.")
+        {
+          alert("Verify email")
+        }
+       else if (responseJson.message === "Invalid Password!")
+        {
+          alert("Verify password")
+        }
+       else
+      {
+          // redirect to profile page
+          alert("Successfully Login");
+          this.props.navigation.navigate("HomeMag");
+      }
+       
+		 })
+		 .catch((error)=>{
+		 console.error(error);
+		 });
+		}
+		
+		
+  }
+ 
   render(){
     return (
   <SafeAreaView style={globalStyles.containerCenter}>
@@ -59,7 +130,7 @@ class MagasinierScreen extends React.Component{
               placeholder="Ecrivez votre Email"
               style={globalStyles.textInput1}
               keyboardType='email-address'
-              onChangeText={formikProps.handleChange('Email')}
+              onChangeText={email => this.setState({email})}
               onBlur={formikProps.handleBlur('Email')}
               
             />
@@ -80,7 +151,7 @@ class MagasinierScreen extends React.Component{
             <TextInput
               placeholder="Mot de passe"
               style={globalStyles.textInput1}
-              onChangeText={formikProps.handleChange('password')}
+              onChangeText={password => this.setState({password})}
               onBlur={formikProps.handleBlur('password')}
               secureTextEntry
             />
@@ -97,8 +168,8 @@ class MagasinierScreen extends React.Component{
                   <ActivityIndicator />
                   ) : (
                     <TouchableOpacity
-                    onPress={() => {this.props.navigation.navigate('HomeMag')}}>
-                      <Text style={globalStyles.textIdent}>S'identifier</Text>
+                    onPress={()=>this.login()}>
+                    <Text style={globalStyles.textIdent}>S'identifier</Text>
                     </TouchableOpacity>
                    )}
 

@@ -1,18 +1,13 @@
 import * as React from 'react';
 import {
-  StyleSheet,
-
   Image,
   View,
-  TouchableOpacity,
   Text,
   ImageBackground,
-  ActivityIndicator,
   Animated,
 } from 'react-native'
 //import * as Font from 'expo-font';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../Model/globalStyles';
 import TextAnimator from '../Model/TextAnimator';
 
@@ -26,29 +21,12 @@ class DétailEntré extends React.Component{
       
       animatedValue: new Animated.Value(0),
 search:'',
-        /* data: [],
-        refreshing: true, */
+        refreshing: true,
         dataSource: [],
 isLoading:true
     }
 }
-//change font
-  /* constructor(){
-    super()
-    this.state={
-      fontLoaded:false
-    }
-  }
-  async componentDidMount(){
-    await Font.loadAsync({
-      'ZenDots-Regular':require('../Fonts/ZenDots-Regular.ttf')
-    })
-    this.setState({fontLoaded:true});
-  } */
-//var Name=req.body.Name;
-
   
-
  render(){
     const position=new Animated.ValueXY({x:0,y:0})
     Animated.timing(position,{
@@ -92,9 +70,7 @@ source={require('../img/instock.png')}
            </Animated.View>
      
 <View style={{height:435,padding:20,}}>
-
-{/* {this.state.fontLoaded?(
- */}    
+  
 <TextAnimator
         content="️️️Détails sur l'entrée" 
         textStyle={[globalStyles.textStyle,{color:'#ffe268'}]}
@@ -102,10 +78,7 @@ source={require('../img/instock.png')}
         duration={800}
 
      />
-   {/*   ):(
-       <ActivityIndicator size='large'/>
-     )}
-      */}
+  
     <View style={{marginTop:40,backgroundColor:'white',flex:1,marginLeft:10,borderRadius:30}}>
   
               <View style={[globalStyles.H,{marginLeft:30,marginTop:18}]}>
@@ -135,17 +108,7 @@ source={require('../img/instock.png')}
             </ImageBackground>
          
 
-{/*              <Text>
-{this.props.route.params.item.Designation} 
-{this.props.route.params.item.Categorie} 
-{this.props.route.params.item.PrixAchat} 
-{this.props.route.params.item.PrixVente} 
-{this.props.route.params.item.MaxRemise} 
-{this.props.route.params.item.QuantitéArticle} 
-{this.props.route.params.item.QuantitéAlerte} 
-{this.props.route.params.item.Id_fournisseur} 
 
-</Text> */}
 </ScrollView>
 
      )

@@ -1,30 +1,17 @@
 import * as React from 'react';
 import {
   StyleSheet,
-
-  Image,
   View,
   TouchableOpacity,
   Text,
   ImageBackground,
-  ActivityIndicator,
   Modal,
-  Pressable,
-  Button,
-  TextInput,
-  Alert,
-  Input,
   FlatList,
-  Linking
 } from 'react-native'
 //import * as Font from 'expo-font';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-    Avatar,
-  }from 'react-native-paper';
+import {Avatar}from 'react-native-paper';
   import { SearchBar } from 'react-native-elements';
-  import globalStyles from '../Model/globalStyles';
   
   
 
@@ -34,8 +21,7 @@ import {
         this.state = {
 Designation:'',
     search:'',
-            /* data: [],
-            refreshing: true, */
+            refreshing: true, 
             dataSource: [],
     isLoading:true,
     modalVisible: false,
@@ -169,16 +155,6 @@ uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdh2upZ-YCfJQlNJaHuHl
 
 
 </View>
-{/* <Modal
-   animationType="slide"
-   visible={modalAjoutVisible}
-
-   onRequestClose={() => {
-     this.setModalAjoutVisible(!modalAjoutVisible);
-   }}>
-<Text>Designation
-</Text>
-</Modal> */}
 
 
 <ScrollView>

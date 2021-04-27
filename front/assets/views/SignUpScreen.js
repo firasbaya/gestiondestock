@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   TextInput,
   Image,
@@ -12,9 +11,7 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { ScrollView } from 'react-native-gesture-handler';
 import {globalStyles} from '../Model/globalStyles';
-import { object } from 'yup/lib/locale';
 
 const validationSchema = yup.object().shape({
   nom: yup

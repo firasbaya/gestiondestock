@@ -2,21 +2,15 @@ import * as React from 'react';
 import {
   StyleSheet,
   FlatList,
-  Image,
   View,
   TouchableOpacity,
   Text,
-  ImageBackground,
   Animated,
-  Alert,
-  Modal,
-  TextAnimat
 } from 'react-native'
 import {
   Avatar,
 }from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
-import globalStyles from '../Model/globalStyles'
 
 
 class listArticleProduct extends React.Component{
@@ -28,8 +22,7 @@ class listArticleProduct extends React.Component{
       
       animatedValue: new Animated.Value(0),
 search:'',
-        /* data: [],
-        refreshing: true, */
+        refreshing: true,
         dataSource: [],
 isLoading:true
     }
@@ -44,43 +37,12 @@ onPresss = (item) => {
   const MaxRemise = item.MaxRemise;
   const QuantiteAlerte = item.QuantiteAlerte;
   const QuantiteArticle = item.QuantiteArticle;
-
   const Id_fournisseur = item.Id_fournisseur;
    
-//Affichage f alert
 
-   {/*  <Text>"Designation:" +" "+item.Designation+'\n'+</Text>
-    <Text>"Marque:" +" "+item.Marque+'\n'+</Text>
-    <Text>"Id_Fournisseur:" +" "+Id_fournisseur+'\n'+</Text>
-    <Text> "PrixAchat:" +" "+PrixAchat+'\n'+</Text>
-    <Text>"PrixVente:" +" "+PrixVente+'\n'+</Text>
-    <Text> "Max Remise:" +" "+MaxRemise+'\n'+</Text>
-    <Text> "QuantitéAlerte:" +" "+QuantiteAlerte+'\n'+</Text>
-    <Text> "QuantitéArticle:" +" "+QuantiteArticle</Text>
-     */}
-    
-  
-  
-
-  {/*     <Text>{item.Marque}</Text>
-    <Text>{item.Id_fournisseur}</Text>
-    <Text> {item.PrixAchat}</Text>
-    <Text>{item.PrixVente}</Text>
-    <Text>{item.MaxRemise}</Text>
-    <Text> {item.QuantiteAlerte}</Text>
-
-    <Text> {item.QuantiteAlerte}</Text> */}
 }
 
-  /*   onPresino(item){
-      this.props.navigation.navigate(
-        'Détail Article',
-        {item},
-    ); */
-
-   
-
-
+ 
 renderItem = ({item}) => {
   this.delayValue = this.delayValue + 500;
   const translateX = this.state.animatedValue.interpolate({
@@ -177,7 +139,6 @@ async componentDidMount() {
             
             
           />
-         
 
 </View>
 

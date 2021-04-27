@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import { StyleSheet, Text, View,Image,TouchableOpacity} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 
 class HomeMag extends Component{
 render(){

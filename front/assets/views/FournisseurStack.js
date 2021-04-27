@@ -2,7 +2,6 @@ import React from "react";
 import {createStackNavigator} from'@react-navigation/stack';
 import listFournisseur from './listFournisseur';
 import DétailFournisseur from './DétailFournisseur';
-import { TabBar } from "react-native-tab-view";
 const stack = createStackNavigator();
 
 const FournisseurStack= () => {

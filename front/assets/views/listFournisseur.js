@@ -2,22 +2,13 @@ import * as React from 'react';
 import {
   StyleSheet,
   FlatList,
-  Image,
   View,
   TouchableOpacity,
   Text,
-  ImageBackground,
   Animated,
-  Alert,
-  Modal,
-  TextAnimat
 } from 'react-native'
-import {
-  Avatar,
-}from 'react-native-paper';
+import { Avatar}from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
-
-import globalStyles from '../Model/globalStyles'
 
 class listFournisseur extends React.Component{
   
@@ -28,13 +19,11 @@ class listFournisseur extends React.Component{
       
       animatedValue: new Animated.Value(0),
 search:'',
-        /* data: [],
-        refreshing: true, */
+        refreshing: true, 
         dataSource: [],
 isLoading:true
     }
 }
- //this.props.navigation.navigate('DetailScreen', {item: item})
 
 onPresss = (item) => {
    const Cin=item.Cin;
@@ -42,30 +31,7 @@ onPresss = (item) => {
   const Adresse = item.Adresse;
   const Telephone= item.Telephone;
   const Email = item.Email;
-   
-//Affichage f alert
-
-   {/*  <Text>"Designation:" +" "+item.Designation+'\n'+</Text>
-    <Text>"Marque:" +" "+item.Marque+'\n'+</Text>
-    <Text>"Id_Fournisseur:" +" "+Id_fournisseur+'\n'+</Text>
-    <Text> "PrixAchat:" +" "+PrixAchat+'\n'+</Text>
-    <Text>"PrixVente:" +" "+PrixVente+'\n'+</Text>
-    <Text> "Max Remise:" +" "+MaxRemise+'\n'+</Text>
-    <Text> "QuantitéAlerte:" +" "+QuantiteAlerte+'\n'+</Text>
-    <Text> "QuantitéArticle:" +" "+QuantiteArticle</Text>
-     */}
-    
   
-  
-
-  {/*     <Text>{item.Marque}</Text>
-    <Text>{item.Id_fournisseur}</Text>
-    <Text> {item.PrixAchat}</Text>
-    <Text>{item.PrixVente}</Text>
-    <Text>{item.MaxRemise}</Text>
-    <Text> {item.QuantiteAlerte}</Text>
-
-    <Text> {item.QuantiteAlerte}</Text> */}
 }
 
 onPresino(item){
@@ -96,16 +62,11 @@ return(
                 size={50}
                 />
  <TouchableOpacity 
- /*  onPress={() => this.onPresss(item)}> */
  onPress={()=>this.onPresino(item)}>
 <Text style={{marginVertical:10,marginLeft:20,letterSpacing:1.7,fontWeight:'bold',fontSize:20,marginLeft:8}}>{item.Nom}</Text> 
  </TouchableOpacity>
  
 </View>
-{/* <View style={{flexDirection:'row'}}>
-<Text>ID Fournisseur:12834752</Text>
-</View> */}
-
 
   </View>
   </Animated.View>

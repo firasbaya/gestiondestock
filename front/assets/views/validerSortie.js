@@ -1,70 +1,91 @@
 import * as React from 'react';
 import {
-  StyleSheet,
-
   Image,
   View,
   TouchableOpacity,
   Text,
   ImageBackground,
-  ActivityIndicator,
   Animated,
-  Modal,
-  Pressable,
-  Button,
   TextInput,
   Alert,
-  Input,
-  Linking
+
 } from 'react-native'
 //import * as Font from 'expo-font';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../Model/globalStyles';
 import TextAnimator from '../Model/TextAnimator';
 
 
 class validerSortie extends React.Component{
-    constructor(props) {
-        super(props);
-    
-        this.state = {
-          Designation:'',
-          QuantiteArticle:''
-        };
-    
-    this.Submit=this.Submit.bind(this);
-    this.onDesginationHandler= (Designation) => this.setState({Designation});
-    this.onQuantiteArticleHandler= (QuantiteArticle) => this.setState({QuantiteArticle});
-    }
-    Submit (){
-      const  objet={   
-      Designation:this.state.Designation,
-      QuantiteArticle:this.state.QuantiteArticle,
-   }
-   Alert.alert(
-    "",
-    "L'article" + " " + objet.Designation + " " + 'a bien été vendu.' ,
-    [
-      
-      { text: "OK", onPress: () => console.log("OK Pressed") }
-    ]
-  );
-       
-  const _id=this.props.route.params.item._id;
-  const apiUrl='http://192.168.1.2:8080/api/articles';
-  fetch(apiUrl + "/" + _id, {
-    method:'put',
-    mode:'no-cors',
-    headers:{
-      'Accept':'application/json',
-      'Content-Type':'application/json'
-    },
-    body:JSON.stringify({
-      QuantiteAlerte:objet.QuantiteAlerte,
-    })
+  constructor(props) {
+    super(props);
 
-  })}
+    this.state = {
+      Designation:'',
+      QuantiteArticle:'',
+      dataSource : [],
+    };
+
+this.Submit=this.Submit.bind(this);
+this.onDesginationHandler= (Designation) => this.setState({Designation});
+this.onQuantiteArticleHandler= (QuantiteArticle) => this.setState({QuantiteArticle});
+}
+componentDidMount()
+{  
+  this.getData()
+}
+getData = async () => {
+  const _id=this.props.route.params.item._id;
+const apiUrl='http://192.168.1.2:8080/api/articles';
+await fetch(apiUrl + "/" + _id, {
+method:'get',
+mode:'no-cors',
+headers:{
+  'Accept':'application/json',
+  'Content-Type':'application/json'
+}
+
+})
+.then((response) => response.json())
+.then((responseJson) => {
+  this.setState({
+    dataSource:responseJson
+  })
+})
+.catch((error) =>{
+  console.log(error)
+})
+
+}
+Submit (){
+  const  objet={   
+  Designation:this.state.Designation,
+  QuantiteArticle:this.state.QuantiteArticle,
+}
+Alert.alert(
+"",
+"La quantité de l'article" + " " + this.state.dataSource.Designation + " " + 'a bien été extrait.' ,
+[
+  
+  { text: "OK", onPress: () => console.log("OK Pressed") }
+]
+);
+const _id=this.props.route.params.item._id;
+const apiUrl='http://192.168.1.2:8080/api/articles';
+fetch(apiUrl + "/" + _id, {
+method:'put',
+mode:'no-cors',
+headers:{
+  'Accept':'application/json',
+  'Content-Type':'application/json'
+},
+body:JSON.stringify({
+  QuantiteArticle: (this.state.dataSource.QuantiteArticle)- Number(objet.QuantiteArticle)
+})
+})
+this.getData();
+
+}
     render(){
         const position=new Animated.ValueXY({x:0,y:0})
         Animated.timing(position,{
@@ -107,8 +128,6 @@ source={require('../img/soldout.png')}
      
 <View style={{height:520,padding:20,}}>
 
-{/* {this.state.fontLoaded?(
- */}    
 <TextAnimator
         content="️️️Sortie de marchandises" 
         textStyle={[globalStyles.textStyle,{color:'#ffe268',fontSize:26,}]}
@@ -166,7 +185,7 @@ source={require('../img/soldout.png')}
           <View style={[globalStyles.E,{width:140,backgroundColor:'#ffe268',borderColor:'#ffe268'}]}>
 
 <TouchableOpacity
-        onPress={this.handleEmail}>
+        onPress={()=>this.Submit()}>
 <Text style={{textAlign:'center',fontSize:17,fontWeight:'bold',}}>Extraire</Text>
         </TouchableOpacity>
         </View>

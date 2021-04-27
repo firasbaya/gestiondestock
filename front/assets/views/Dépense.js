@@ -1,115 +1,80 @@
 import React from 'react';
-import {View,Text,TouchableOpacity} from 'react-native';
+import {View,Text,TouchableOpacity,Alert} from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { Title } from 'react-native-paper';
 import {globalStyles} from '../Model/globalStyles';
-import { Formik } from 'formik';
-import * as yup from 'yup';
-/* 
-const CreateDépense = () => {
-  const [Titre,setTitre] = useState("")
-  const [Montant,setMontant] = useState("")
- 
-  const submitData = ()=> {
-    //   voir send-data
-    fetch ("http://localhost:3000/send-data",{
-    method:"post",
-    headers:{
-      'Content-Type' : 'application/json'
-    },
-    body:JSON.stringify({
-    Titre,
-    Montant
-    
-    })
-  })
-  .then(res=>res.json())
-  .then(data=>{
-    console.log(data)
-  })
-}
-} */
 
-const validationSchema = yup.object().shape({
-    Titre: yup
-    .string()
-    .label('')
-    .required('Ce champs est obligatoire.'),
-    Montant: yup
-     
-      .number()
-      .typeError('Montant doit être un nombre')
-      .min(0, 'Valeur minimal : 0.')
-      .max(5000, 'Valeur Maximale 5000.')
-      .label('')
-      .required('Ce champs est obligatoire.'),
 
-      
-    
-  });
 class Dépense extends React.Component{
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      Titre:'',
+      Montant:''
+     
+    };
+    this.Submit=this.Submit.bind(this);
+  }
+  Submit= () => {
+    const {Titre,Montant}=this.state;
+    if(Titre==""){
+      Alert.alert("Erreur",'Entrez le titre.');
+      this.setState({Titre:'Entrez le titre.'})
+    }
+    else if (Montant===""){
+      Alert.alert("Erreur",'Entrez le montant.')
+      this.setState({Montant:'Entrez le montant.'})
+    }
+    else {
+      fetch('http://192.168.1.4:8080/api/depenses',{
+      method:'post',
+      mode:'no-cors',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      },
+			body:JSON.stringify({
+				// we will pass our input data to server
+				Titre ,
+				Montant
+      },
+      Alert.alert(
+        "",
+        "La dépense" + " " + Titre + " " + 'a bien été ajoutée.' ,
+        [
+          
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      ))})}}
+
     render(){
       return (
         <View style={globalStyles.container}>
-            <View style={[globalStyles.Header,{backgroundColor:'#367ce5',borderColor:'#367ce5'}]}>
-                <Title style={[globalStyles.Title,{marginleft:12,letterSpacing:3}]}>Dépenses</Title>           
-             </View>
-          
-          <View style={{margin:30}}>
-          <Formik
-             initialValues={{ Titre: '', Montant: '' }}
-             onSubmit={(values, actions) => {
-               alert(JSON.stringify(values));
-               setTimeout(() => {
-                 actions.setSubmitting(false);
-               }, 1000);
-             }}
-             validationSchema={validationSchema}
-           >
-               {(formikProps) => (
-        <React.Fragment>
+            <View style={{margin:30}}>
+        
+              
             <Text style={{fontSize:18,fontWeight:'bold',marginTop:20,marginBottom:10}}>Titre:</Text>
             
             <TextInput
             placeholder='Frais de réparation'
-            /* label='Titre'
-            value={Titre}
-            onChangeText={text => setTitre(text)} */
-            //onChangeText={formikProps.handleChange('Titre')}
-            onBlur={formikProps.handleBlur('Titre')}
+           onChangeText={Titre => this.setState({Titre})}
              />
-
-
-                    <Text style={{ color: 'red' }}>
-                        {formikProps.touched.Titre && formikProps.errors.Titre}
-                    </Text>    
-           
+            
            
             <Text style={{fontSize:18,fontWeight:'bold',marginTop:25,marginBottom:10}}>Montant:</Text>
             
             <TextInput
             placeholder='0'
-           /*  label='Montant'
-            value={Montant}
-            onChangeText={text => setMontant(text)} */
-            //onChangeText={formikProps.handleChange('Montant')}
-            onBlur={formikProps.handleBlur('Montant')}
+            onChangeText={Montant => this.setState({Montant})}
             keyboardType='numeric'
             />
-            <Text style={{ color: 'red' }}>
-                        {formikProps.touched.Montant && formikProps.errors.Montant}
-                    </Text>  
-
-
-            </React.Fragment>
-               )}
-               </Formik>
+        
             </View>
             
            
-            <View style={[globalStyles.vButton,{backgroundColor:'#367ce5',borderColor:'#367ce5',marginTop:60}]}>
+            <View style={[globalStyles.vButton,{backgroundColor:'#367ce5',borderColor:'#367ce5',marginTop:0}]}>
                    <TouchableOpacity
-                        onPress={()=> alert('button clicked!')}>                 
+                          onPress={() => this.Submit()}>                 
                         <Text style={globalStyles.ajouter}>Ajouter</Text>
                    </TouchableOpacity>
               </View>

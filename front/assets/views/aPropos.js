@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, StatusBar, View, StyleSheet,Text } from 'react-native';
+import { StatusBar, View, StyleSheet,Text } from 'react-native';
 import Constants from 'expo-constants';
 import TextAnimator from '../Model/TextAnimator';
 

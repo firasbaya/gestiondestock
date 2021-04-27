@@ -1,6 +1,5 @@
-import React ,{Component}from 'react';
-import {View,Text,Button,SafeAreaView,TouchableOpacity,Image,TextInput} from 'react-native';
-import { Title } from 'react-native-paper';
+import React from 'react';
+import {View,Text,Button,Image,TextInput} from 'react-native';
 import  {globalStyles} from '../Model/globalStyles';
 
 import * as SMS from 'expo-sms';
@@ -40,7 +39,7 @@ class sendMail extends React.Component{
                     <TextInput
                     placeholder='w203'
                     style={[globalStyles.TextInput,{marginBottom:30,borderWidth:1,borderBottomWidth:1,width:200}]}
-                     autoFocus/>
+                    />
 <View style={{marginVertical:20,marginHorizontal:100}}>
 <Button
 title='Valider'
@@ -49,67 +48,6 @@ color='#367ce5'
 />
 </View>
                      </View>
-
-
-            {/*  <View style={[globalStyles.E,{borderRadius:40,marginTop:25}]}>
-            <View style={globalStyles.H}>
-               
-                <Text style={globalStyles.sousTitre}>La quantité de l'article x est bientot epuisée.{'\n'}Voulez-vous passer une nouvelle commande? </Text>
-
-            </View>
-            </View>
-             <View style={globalStyles.Body}>
-                <View style={globalStyles.H}>
-                    <Image
-                      style={globalStyles.icon}
-                      source={require('../img/lalaw.png')}
-                    />
-                     <Text style={globalStyles.sousTitre}>Quantité</Text>
-                </View>
-
-                    <TextInput
-                    placeholder='w203'
-                    style={globalStyles.TextInput}
-                  
-                     autoFocus/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      {/*        <Text style={{fontSize:25}}>La quantité de l'article x est bientot epuisée.{'\n'}Voulez-vous passer une nouvelle commande? </Text>
-
-
-             <View style={{flexDirection:'row'}}>
-     <TouchableOpacity
-     onPress={this.onPress}>   
-    <View style={{
-        backgroundColor:'blue',
-        alignItems:'center',
-        marginLeft:80,
-        marginRight:80,
-        width:100,
-        borderRadius:15,
-        marginTop:30,
-    }}>
-   
-        <Text style={[globalStyles.textAdmin,{color:'white',textAlign:'center',marginLeft:0}]}>Oui</Text>
-        
-        </View>
-        </TouchableOpacity>
-    
-    
-        </View> */}
     </View>
       );}}
      

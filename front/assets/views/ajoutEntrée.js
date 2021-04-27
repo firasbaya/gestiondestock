@@ -1,21 +1,12 @@
 import * as React from 'react';
 import {
   StyleSheet,
-
-  Image,
   View,
   TouchableOpacity,
   Text,
   ImageBackground,
-  ActivityIndicator,
   Modal,
-  Pressable,
-  Button,
-  TextInput,
-  Alert,
-  Input,
   FlatList,
-  Linking
 } from 'react-native'
 //import * as Font from 'expo-font';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -169,17 +160,6 @@ uri:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYWFRgWFhYZGBga
 
 
 </View>
-{/* <Modal
-   animationType="slide"
-   visible={modalAjoutVisible}
-
-   onRequestClose={() => {
-     this.setModalAjoutVisible(!modalAjoutVisible);
-   }}>
-<Text>Designation
-</Text>
-</Modal> */}
-
 
 <ScrollView>
 <Modal

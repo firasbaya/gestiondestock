@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import listEntre from './listEntre';
-import listSortie from './listSortie';
 import SortieStack from './SortieStack';
 import EntréStack from './EntréStack';
 const Tab = createMaterialTopTabNavigator()

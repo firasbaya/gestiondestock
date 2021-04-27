@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import listMagasinier from './listMagasinier';
 import ajoutMagasinier from './ajoutMagasinier';
 import MagasinierStack from './MagasinierStack';
 const Tab = createMaterialTopTabNavigator()

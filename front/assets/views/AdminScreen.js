@@ -2,35 +2,23 @@ import React from 'react';
 import {
   TextInput,
   Image,
-  ActivityIndicator,
   Text,
   View,
   TouchableOpacity,
 } from 'react-native';
-import { Formik } from 'formik';
-import * as yup from 'yup';
+
 import { SafeAreaView } from 'react-native';
 import { globalStyles } from '../Model/globalStyles';
 
 
-const validationSchema = yup.object().shape({
-  email: yup
-  .string('')
-  .email('Format incorrecte')
-  .label('Email Administrateur')
-  .required('Ce champs est obligatoire.'),
-  password: yup
-    .string()
-    .label('Mot de passe')
-    .required('Ce champs est obligatoire.')
-});
 
 class AdminScreen extends React.Component{
   constructor(props){
 		super(props)
 		this.state={
 			email:'',
-			password:''
+			password:'',
+      dataSource : [],
 		}
     this.login = this.login.bind(this)
 	}
@@ -53,9 +41,10 @@ class AdminScreen extends React.Component{
 		else if(password===""){
 		this.setState({email:'Entrez votre mot de passe'})
 		}
+   
 		else{
   
-		fetch('http://192.168.1.2:8080/api/auth/signin',{
+		fetch('http://192.168.1.4:8080/api/auth/signin',{
       method:'post',
       mode:'no-cors',
       headers:{
@@ -97,22 +86,11 @@ class AdminScreen extends React.Component{
   }
   render(){
     return (
-  <SafeAreaView style={globalStyles.containerCenter}>
+  <View style={globalStyles.containerCenter}>
+
     
-    <Formik
-      initialValues={{ email: '', password: '' }}
-      onSubmit={(values, actions) => {
-        alert(JSON.stringify(values));
-        setTimeout(() => {
-          actions.setSubmitting(false);
-        }, 1000);
-      }}
-      validationSchema={validationSchema}
-    >
-      {(formikProps) => (
-        <React.Fragment>
-         <View>
-         
+            <View>
+
           <Text style={globalStyles.titre}>Administrateur</Text>
           </View>
               <View style={globalStyles.mini}>
@@ -129,15 +107,10 @@ class AdminScreen extends React.Component{
               placeholder="Ecrivez votre Email"
               style={globalStyles.textInput1}
               onChangeText={email => this.setState({email})}
-              onBlur={formikProps.handleBlur('email')}
               keyboardType='email-address'
             />
 
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.email && formikProps.errors.email}
-            </Text>
-          
-
+             
           <View style={globalStyles.mini2}>
               <Image
                 style={globalStyles.imageAdmin}
@@ -150,29 +123,17 @@ class AdminScreen extends React.Component{
               placeholder="Mot de passe"
               style={globalStyles.textInput1}
               onChangeText={password => this.setState({password})}
-              onBlur={formikProps.handleBlur('password')}
               secureTextEntry
             />
 
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.password && formikProps.errors.password}
-            </Text>
-          
-          
 
           <View style={globalStyles.mini3}>
-              
-              {formikProps.isSubmitting ? (
-                  <ActivityIndicator />
-                  ) : (
+                          
                     <TouchableOpacity
-                    //onPress={this.login}
-                   onPress={this.login}
+                   onPress={()=>this.login()}
                    >
                       <Text style={globalStyles.textIdent}>S'identifier</Text>
                     </TouchableOpacity>
-                   )}
-
           </View>
           
           <TouchableOpacity
@@ -185,11 +146,8 @@ class AdminScreen extends React.Component{
           <Text style={[globalStyles.create,{marginTop:11}]}>Créer un compte.</Text>
       </TouchableOpacity>
       
-        </React.Fragment>
-      )}
-      
-    </Formik>
-  </SafeAreaView>
+
+  </View>
 );}}
 
 export default AdminScreen;

@@ -1,7 +1,5 @@
 import React,{Component} from 'react';
 import {View,Image,Text,StatusBar} from 'react-native';
-import { globalStyles } from '../Model/globalStyles';
-import {Avatar} from 'react-native-paper'
 
 var logo =require('../img/test.png')
 

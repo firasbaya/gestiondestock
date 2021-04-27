@@ -8,40 +8,7 @@ import {
   Alert
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Formik } from 'formik';
-import * as yup from 'yup';
 import {globalStyles} from '../Model/globalStyles';
-
-const validationSchema = yup.object().shape({
-    Cin: yup
-    .number()
-    .typeError('Cin doit être un nombre')
-    .required('Ce champs est obligatoire.'),
-    Nom: yup
-      .string()
-      .label('')
-      .required('Ce champs est obligatoire.'),
-    Adresse: yup
-      .string()
-      .label('')
-      .required('Ce champs est obligatoire.'),
-     Téléphone: yup
-      .string()
-      .label('')
-      .required('Ce champs est obligatoire.'),
-    Email: yup
-      .string()
-      .email('Email non valide')
-      .label('')
-      .required('Ce champs est obligatoire.'),
-    Password:yup
-      .string()
-      .label('Mot de passe')
-      .required('Mot de passe obligatoire.')
-      .min(5,'Votre mot de passe est trop court') 
-      .max(20,'Vous ne pouvez pas dépassser 20 lettres'),
-  });
-
 
 
   class ajoutMagasinier extends React.Component{
@@ -58,68 +25,109 @@ const validationSchema = yup.object().shape({
        
       };
       this.Submit=this.Submit.bind(this);
-    this.onCinHandler= (cin) => this.setState({cin});
-    this.onNomHandler= (nom) => this.setState({nom});
-    this.onAdresseHandler= (adresse) => this.setState({adresse});
-    this.onTéléphoneHandler= (telephone)=> this.setState({telephone});
-    this.onEmailHandler= (email)=> this.setState({email});
-    this.onPasswordHandler= (password) => this.setState({password});
-   
     }
-    Submit (){
-      const  objet={   
-        email:this.state.email,
-        password:this.state.password,
-        nom:this.state.nom,
-        cin:this.state.cin,
-        telephone:this.state.telephone,
-      adresse:this.state.adresse,
-      
-   }
-   Alert.alert(
-    "",
-    "Le magasinier" + " " + objet.nom + " " + 'a bien été ajouté.' ,
-    [
-      
-      { text: "OK", onPress: () => console.log("OK Pressed") }
-    ]
-  );
-   fetch('http://192.168.1.2:8080/api/auth/signup',{
-    method:'post',
-    mode:'no-cors',
-    headers:{
-      'Accept':'application/json',
-      'Content-Type':'application/json'
-    },
-    body:JSON.stringify({
-      email:objet.email,
-      password:objet.password,
-      nom:objet.nom,
-      cin:objet.cin,
-      telephone:objet.telephone,
-      adresse:objet.adresse,
-     
-    })
+    Submit= () => {
+      const             { 
+        email,
+        password,
+        nom,
+        cin,
+        telephone,
+        adresse,
+                                }=this.state;
 
-  })}
+  let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+  if (cin===""){
+    Alert.alert
+    ("Erreur","Entrez votre numéro de cin.")
+    this.setState({cin:"Entrez votre numéro de cin."})}
+  
+     else if(email==""){
+        Alert.alert
+          ("Erreur","Entrez votre email.");
+        this.setState({email:"Entrez votre email."})
+      }
+      else if(reg.test(email) === false)
+		{
+	  	Alert.alert
+      ("Erreur","Format de l'Email incorrecte.");
+		  this.setState({email:"Format de l'Email incorrecte."})
+		  return false;
+		  }
+      else if (password===""){
+        Alert.alert
+        ("Erreur","Entrez votre mot de passe")
+        this.setState({password:'Entrez votre mot de passe.'})
+      }
+      else if (nom===""){
+        Alert.alert
+        ("Erreur",'Entrez votre nom.')
+        this.setState({nom:'Entrez votre nom.'})
+      }
+    
+        else if (cin.length<8 || cin.length>8)
+        {
+           Alert.alert 
+           ("Erreur","Le numéro du CIN doit contenir 8 chiffres.")
+          this.setState({cin:"Le numéro du CIN doit contenir 8 chiffres."})}
+          
+          else if (telephone===""){
+            Alert.alert
+            ("Erreur","Entrez votre numéro.")
+            this.setState({telephone:"Entrez votre numéro."})}
+          
+            else if (telephone.length<8 || telephone.length>8)
+            {
+               Alert.alert 
+               ("Erreur","Le numéro  doit contenir 8 chiffres.")
+              this.setState({telephone:"Le numéro de téléphone doit contenir 8 chiffres."})}
+            
+
+
+          else if (adresse===""){
+         Alert.alert 
+         ("Erreur","Entrez votre adresse.")
+        this.setState({adresse:"Entrez votre adresse."})
+      }
+      else if (adresse.length<4)
+      {
+         Alert.alert 
+         ("Erreur","Le format doit etre comme suit :" +"\n" +"xxxx sousse.")
+        this.setState({telephone:"Le format doit etre comme suit : xx rue xx sousse."})}
+      
+
+      else {
+        fetch('http://192.168.1.4:8080/api/auth/signup',{
+        method:'post',
+        mode:'no-cors',
+        headers:{
+          'Accept':'application/json',
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          // we will pass our input data to server
+          email,
+          password,
+          nom,
+          cin,
+          telephone,
+          adresse,
+        },
+        Alert.alert(
+          "",
+          "Le magasinier" + " " +nom + " " + 'a bien été ajouté.' ,
+          [
+            
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ]
+        ))})}}
     render(){
       return (
 
 <View style={globalStyles.container}>
   
     <ScrollView>
-    <Formik
-      initialValues={{ Cin: '', Nom: '' ,Adresse:'',Téléphone:'',Email:'',Password:''}}
-      onSubmit={(values, actions) => {
-        alert(JSON.stringify(values));
-        setTimeout(() => {
-          actions.setSubmitting(false);
-        }, 1000);
-      }}
-      validationSchema={validationSchema}
-    >
-      {(formikProps) => (
-        <React.Fragment>
+
         
         <View style={globalStyles.Body}>
             <View style={globalStyles.H}>
@@ -133,17 +141,10 @@ const validationSchema = yup.object().shape({
             <TextInput
             placeholder='12284890'
             style={globalStyles.TextInput}
-            /* label='Cin'
-            value={Cin}
-            onChangeText={text => setCin(text)} */
-            //onChangeText={formikProps.handleChange('Cin')}
-            onChangeText={this.onCinHandler} 
-            onBlur={formikProps.handleBlur('Cin')}
+            onChangeText={cin => this.setState({cin})}
             keyboardType='numeric'
             />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Cin && formikProps.errors.Cin}
-            </Text>    
+          
         </View>
 
         <View style={globalStyles.E}>
@@ -157,16 +158,10 @@ const validationSchema = yup.object().shape({
             <TextInput
             placeholder='Emira'
             style={globalStyles.TextInput}
-            /* label='Nom'
-            value={Nom}
-            onChangeText={text => setNom(text)} */
-            //onChangeText={formikProps.handleChange('Nom')}
-            onChangeText={this.onNomHandler} 
-            onBlur={formikProps.handleBlur('Nom')}
+            onChangeText={nom => this.setState({nom})}
+
             />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Nom && formikProps.errors.Nom}
-            </Text>      
+         
         </View>
         <View style={globalStyles.E}>
             <View style={globalStyles.H}>
@@ -179,16 +174,9 @@ const validationSchema = yup.object().shape({
             <TextInput
             placeholder='30 Rue la douceur'
             style={globalStyles.TextInput}
-            /* label='Adresse'
-            value={Adresse}
-            onChangeText={text => setAdresse(text)} */
-            //onChangeText={formikProps.handleChange('Adresse')}
-            onChangeText={this.onAdresseHandler} 
-            onBlur={formikProps.handleBlur('Adresse')}/>
+            onChangeText={adresse => this.setState({adresse})}
 
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Adresse && formikProps.errors.Adresse}
-            </Text>      
+          />
         </View>
 
         <View style={globalStyles.E}>
@@ -202,19 +190,11 @@ const validationSchema = yup.object().shape({
             <TextInput
             placeholder='53570050'
             style={globalStyles.TextInput}
-            /* label='Téléphone'
-            value={Téléphone}
-            onChangeText={text => setTéléphone(text)} */
-            //onChangeText={formikProps.handleChange('Téléphone')}
-            onChangeText={this.onTéléphoneHandler} 
-            onBlur={formikProps.handleBlur('Téléphone')}
-            
+            onChangeText={telephone => this.setState({telephone})}
             keyboardType='numeric'
 
             />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Téléphone && formikProps.errors.Téléphone}
-            </Text>      
+         
         </View>
        
         <View style={globalStyles.E}>
@@ -228,17 +208,10 @@ const validationSchema = yup.object().shape({
             <TextInput
             placeholder='FamilyBusiness@gmail.com'
             style={globalStyles.TextInput}
-           /*  label='Email'
-            value={Email}
-            onChangeText={text => setEmail(text)} */
-            //onChangeText={formikProps.handleChange('Email')}
-            onChangeText={this.onEmailHandler} 
-            onBlur={formikProps.handleBlur('Email')}
+            onChangeText={email => this.setState({email})}
             keyboardType='email-address'
             />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Email && formikProps.errors.Email}
-            </Text>      
+         
      </View>
 
      <View style={globalStyles.E}>
@@ -252,27 +225,12 @@ const validationSchema = yup.object().shape({
             <TextInput
             placeholder='************'
             style={globalStyles.TextInput}
-           /*  label='Password'
-            value={Password}
-            onChangeText={text => setPassword(text)} */
-            //onChangeText={formikProps.handleChange('Password')}
-            onChangeText={this.onPasswordHandler} 
-            onBlur={formikProps.handleBlur('Password')}
+            onChangeText={password => this.setState({password})}
             secureTextEntry
           />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Password && formikProps.errors.Password}
-            </Text>      
+        
      </View>
        
-       
-       
-        </React.Fragment>
-      )}
-      
-    </Formik>
-        
-  
     <Button title='Ajouter' 
                  onPress={() => this.Submit()}
                   color='#FFA500'

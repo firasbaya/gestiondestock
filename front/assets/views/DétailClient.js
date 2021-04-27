@@ -1,24 +1,18 @@
 import * as React from 'react';
 import {
   StyleSheet,
-
   Image,
   View,
   TouchableOpacity,
   Text,
   ImageBackground,
-  ActivityIndicator,
   Animated,
   Modal,
-  Pressable,
-  Button,
   TextInput,
   Alert,
-  Input
 } from 'react-native'
 //import * as Font from 'expo-font';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../Model/globalStyles';
 import TextAnimator from '../Model/TextAnimator';
 
@@ -26,18 +20,13 @@ import TextAnimator from '../Model/TextAnimator';
 class DétailClient extends React.Component{
   constructor() {
     super();
-
-/*     this.modifier = this.modifier.bind(this);
-this.state = { isModalOpen: false */
-  
   this.delayValue = 8000;
   
     this.state = {
 
       animatedValue: new Animated.Value(0),
 search:'',
-        /* data: [],
-        refreshing: true, */
+        refreshing: true,
         dataSource: [],
 isLoading:true,
 Cin:'',
@@ -81,7 +70,6 @@ Alert.alert(
   ]
 );
   
-//fetch(`http://192.168.1.10:8080/api/clients/60835fc075e2b00a44521166`,{
 
   const _id=this.props.route.params.item._id;
   const apiUrl='http://192.168.1.2:8080/api/clients';
@@ -114,56 +102,14 @@ remove(){
     console.error(err)
   });
 }
-//change font
-  /* constructor(){
-    super()
-    this.state={
-      fontLoaded:false
-    }
-  }
-  async componentDidMount(){
-    await Font.loadAsync({
-      'ZenDots-Regular':require('../Fonts/ZenDots-Regular.ttf')
-    })
-    this.setState({fontLoaded:true});
-  } */
-//var Name=req.body.Name;
- /*  modifier = () => {
 
-    const { isModalOpen } = this.state; this.setState({ isModalOpen: !isModalOpen });
- */
-  /*  db.collection('clients').updateOne({"Name":Name},function (err,result){
-     console.log('updated')
-    */
-   
 
      setModalVisible = (visible) => {
       this.setState({ modalVisible: visible });
     }
 
   
-/* componentDidMount() {
 
- fetch ('http://192.168.1.8:8080/api/clients/id',{
- method:'delete',
- mode:'no-cors',
- headers:{
- 'Accept':'application/json',
- 'Content-Type':'application/json'
- },
-
-})
- 
-.then((response) => response.json())
-.then((responseJson) => {
- this.setState({
-   dataSource:responseJson
- })
-})
-.catch((error) =>{
- console.log(error)
-}
-)} */
  render(){
    
   const { modalVisible } = this.state;
@@ -232,8 +178,7 @@ source={require('../img/Client.png')}
      
 <View style={{height:750,padding:20,}}>
 
-{/* {this.state.fontLoaded?(
- */}    
+
 <TextAnimator
         content="️️️Détails sur le client" 
         textStyle={[globalStyles.textStyle,{color:'#ffe268'}]}
@@ -241,10 +186,7 @@ source={require('../img/Client.png')}
         duration={800}
 
      />
-   {/*   ):(
-       <ActivityIndicator size='large'/>
-     )}
-      */}
+  
     <View style={{marginTop:40,backgroundColor:'white',flex:1,marginLeft:10,borderRadius:30}}>
       
     <Modal
@@ -299,8 +241,7 @@ source={require('../img/Client.png')}
      
 <View style={{height:820,padding:20,}}>
 
-{/* {this.state.fontLoaded?(
- */}    
+  
 <TextAnimator
         content="️️️Modifier fiche client" 
         textStyle={[globalStyles.textStyle,{color:'#ffe268'}]}
@@ -514,19 +455,7 @@ source={require('../img/Client.png')}
 
 
             </ImageBackground>
-         
 
-{/*              <Text>
-{this.props.route.params.item.Designation} 
-{this.props.route.params.item.Categorie} 
-{this.props.route.params.item.PrixAchat} 
-{this.props.route.params.item.PrixVente} 
-{this.props.route.params.item.MaxRemise} 
-{this.props.route.params.item.QuantitéArticle} 
-{this.props.route.params.item.QuantitéAlerte} 
-{this.props.route.params.item.Id_fournisseur} 
-
-</Text> */}
 </ScrollView>
 
      )

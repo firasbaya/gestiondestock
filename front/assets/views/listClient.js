@@ -2,21 +2,15 @@ import * as React from 'react';
 import {
   StyleSheet,
   FlatList,
-  Image,
   View,
   TouchableOpacity,
   Text,
-  ImageBackground,
   Animated,
-  Alert,
-  Modal,
-  
 } from 'react-native'
 import {
   Avatar,
 }from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
-import globalStyles from '../Model/globalStyles'
 
   
 class listClient extends React.Component{
@@ -28,13 +22,11 @@ class listClient extends React.Component{
       
       animatedValue: new Animated.Value(0),
 search:'',
-        /* data: [],
-        refreshing: true, */
+        refreshing: true, 
         dataSource: [],
 isLoading:true
     }
 }
- //this.props.navigation.navigate('DetailScreen', {item: item})
 
 onPresss = (item) => {
    const Cin=item.Cin;
@@ -43,30 +35,7 @@ onPresss = (item) => {
   const Telephone= item.Telephone;
   const Email = item.Email;
   const Crédit = item.Crédit;
-   
-//Affichage f alert
-
-   {/*  <Text>"Designation:" +" "+item.Designation+'\n'+</Text>
-    <Text>"Marque:" +" "+item.Marque+'\n'+</Text>
-    <Text>"Id_Fournisseur:" +" "+Id_fournisseur+'\n'+</Text>
-    <Text> "PrixAchat:" +" "+PrixAchat+'\n'+</Text>
-    <Text>"PrixVente:" +" "+PrixVente+'\n'+</Text>
-    <Text> "Max Remise:" +" "+MaxRemise+'\n'+</Text>
-    <Text> "QuantitéAlerte:" +" "+QuantiteAlerte+'\n'+</Text>
-    <Text> "QuantitéArticle:" +" "+QuantiteArticle</Text>
-     */}
-    
   
-  
-
-  {/*     <Text>{item.Marque}</Text>
-    <Text>{item.Id_fournisseur}</Text>
-    <Text> {item.PrixAchat}</Text>
-    <Text>{item.PrixVente}</Text>
-    <Text>{item.MaxRemise}</Text>
-    <Text> {item.QuantiteAlerte}</Text>
-
-    <Text> {item.QuantiteAlerte}</Text> */}
 }
 
 onPresino(item){
@@ -75,7 +44,7 @@ onPresino(item){
     'DétailClient',
     {item}
     
-  /*   {item}, */
+
   )
 
 
@@ -107,10 +76,6 @@ return(
  
 </View>
 </TouchableOpacity>
-{/* <View style={{flexDirection:'row'}}>
-<Text>ID Fournisseur:12834752</Text>
-</View> */}
-
 
   </View>
   </Animated.View>

@@ -2,8 +2,6 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Client from './Client';
-import listClient from './listClient';
-import DétailArticle from './DétailArticle';
 import ClientStack from './ClientStack'
 
 const Tab = createMaterialTopTabNavigator();

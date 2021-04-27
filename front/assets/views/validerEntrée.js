@@ -1,25 +1,15 @@
 import * as React from 'react';
 import {
-  StyleSheet,
-
   Image,
   View,
   TouchableOpacity,
   Text,
   ImageBackground,
-  ActivityIndicator,
   Animated,
-  Modal,
-  Pressable,
-  Button,
   TextInput,
   Alert,
-  Input,
-  Linking
 } from 'react-native'
 //import * as Font from 'expo-font';
-import { ScrollView } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../Model/globalStyles';
 import TextAnimator from '../Model/TextAnimator';
 
@@ -72,7 +62,7 @@ class validerEntrée extends React.Component{
    }
    Alert.alert(
     "",
-    "La quantité de l'article" + " " + objet.Designation + " " + 'a bien été ajouté.' ,
+    "La quantité de l'article" + " " + this.state.dataSource.Designation  + " " + 'a bien été ajouté.' ,
     [
       
       { text: "OK", onPress: () => console.log("OK Pressed") }

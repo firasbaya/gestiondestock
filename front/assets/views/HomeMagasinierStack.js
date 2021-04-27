@@ -1,9 +1,6 @@
 import React from "react";
 import {createStackNavigator} from'@react-navigation/stack';
-import listClient from './listClient';
-import { TabBar } from "react-native-tab-view";
 import HomeMag from "./HomeMag";
-import Home from "./Home";
 import ClientStack from "./ClientStack";
 const stack = createStackNavigator();
 

@@ -6,7 +6,6 @@ import {
   Text,
   View,
   Alert,
-  alert,
   TouchableOpacity,
 } from 'react-native';
 import {globalStyles} from '../Model/globalStyles';
