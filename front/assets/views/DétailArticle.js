@@ -16,22 +16,18 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { globalStyles } from '../Model/globalStyles';
 import TextAnimator from '../Model/TextAnimator';
+import * as SMS from 'expo-sms';
+import email from 'react-native-email'
 
 
 class DétailArticle extends React.Component{
   constructor() {
     super();
-
-/*     this.modifier = this.modifier.bind(this);
-this.state = { isModalOpen: false */
-
     this.delayValue = 8000;
     this.state = {
 
       animatedValue: new Animated.Value(0),
 search:'',
-        /* data: [],
-        refreshing: true, */
         dataSource: [],
 isLoading:true,
 Designation:'',
@@ -82,7 +78,7 @@ Alert.alert(
 );
   
 const _id=this.props.route.params.item._id;
-const apiUrl='http://192.168.1.2:8080/api/articles';
+const apiUrl='http://192.168.1.4:8080/api/articles';
 
 fetch(apiUrl + "/" + _id, {
   method:'put',
@@ -213,8 +209,7 @@ source={require('../img/Articleimagee.jpg')}/>
      
 <View style={{height:1040,padding:20,}}>
 
-{/* {this.state.fontLoaded?(
- */}    
+
 <TextAnimator
         content="️️️Détails sur l'article" 
         textStyle={[globalStyles.textStyle,{color:'#ffe268'}]}
@@ -222,10 +217,7 @@ source={require('../img/Articleimagee.jpg')}/>
         duration={800}
 
      />
-   {/*   ):(
-       <ActivityIndicator size='large'/>
-     )}
-      */}
+
     <View style={{marginTop:40,backgroundColor:'white',flex:1,marginLeft:10,borderRadius:30}}>
       
 
@@ -284,8 +276,7 @@ source={require('../img/Articleimagee.jpg')}                    />
      
 <View style={{height:1060,padding:20,}}>
 
-{/* {this.state.fontLoaded?(
- */}    
+
 <TextAnimator
         content="️️️Modifier fiche article" 
         textStyle={[globalStyles.textStyle,{color:'#ffe268'}]}
@@ -700,18 +691,6 @@ source={{uri:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMTEhU
 
             </ImageBackground>
          
-
-{/*              <Text>
-{this.props.route.params.item.Designation} 
-{this.props.route.params.item.Categorie} 
-{this.props.route.params.item.PrixAchat} 
-{this.props.route.params.item.PrixVente} 
-{this.props.route.params.item.MaxRemise} 
-{this.props.route.params.item.QuantitéArticle} 
-{this.props.route.params.item.QuantitéAlerte} 
-{this.props.route.params.item.Id_fournisseur} 
-
-</Text> */}
 </ScrollView>
 
      )
