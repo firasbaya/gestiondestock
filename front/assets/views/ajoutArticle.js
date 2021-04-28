@@ -25,11 +25,10 @@ import {globalStyles} from '../Model/globalStyles';
         PrixVente:'',
         MaxRemise:'',
         QuantiteAlerte:'',
-        QuantiteArticle:''
       };
       this.Submit=this.Submit.bind(this);
     }
-    Submit= () => {
+    Submit= async() => {
       const             { 
         Designation,
         Marque,
@@ -39,7 +38,6 @@ import {globalStyles} from '../Model/globalStyles';
         PrixVente,
         MaxRemise,
         QuantiteAlerte,
-        QuantiteArticle,
                          }=this.state;
       if(Designation==""){
         Alert.alert
@@ -72,30 +70,53 @@ import {globalStyles} from '../Model/globalStyles';
          ("Erreur","Entrez le prix d'achat.")
         this.setState({PrixAchat:"Entrez le prix d'achat."})
       }
-
+      else if (PrixAchat<=0){
+        Alert.alert
+         ("Erreur","Prix d'achat doit etre supérieur à 0.")
+       this.setState({PrixAchat:"Prix d'achat doit etre supérieur à 0."})
+     }
       else if (PrixVente===""){
          Alert.alert
           ("Erreur",'Entrez le prix de vente.')
-        this.setState({prixVente:'Entrez le prix de vente.'})
+        this.setState({PrixVente:'Entrez le prix de vente.'})
       }
+      else if (PrixVente<=0){
+        Alert.alert
+         ("Erreur",'Prix de vente doit etre supérieur à 0.')
+       this.setState({PrixVente:'Prix de vente doit etre supérieur à 0.'})
+     }
+      
+      
+      else if (PrixVente<PrixAchat){
+        Alert.alert
+         ("Erreur","Le prix de vente doit etre inférieure au prix d'achat.")
+       this.setState({prixVente:"Le prix de vente doit etre inférieure au prix d'achat."})
+     }
+      
       else if (MaxRemise===""){
          Alert.alert 
          ("Erreur",'Entrez le taux de réduction.')
         this.setState({MaxRemise:'Entrez le taux de réduction.'})
       }
+      else if (MaxRemise<0){
+        Alert.alert 
+        ("Erreur",'Le taux de remise doit etre positif.')
+       this.setState({MaxRemise:'Le taux de remise doit etre positif.'})
+     }
       else if (QuantiteAlerte===""){
         Alert.alert
         ("Erreur","Entrez la quantité d'alerte.")
         this.setState({QuantiteAlerte:"Entrez la quantité d'alerte."})
       }
-      else if (QuantiteArticle===""){
+      else if (QuantiteAlerte<0){
         Alert.alert
-        ("Erreur","Entrez la quantité d'article.")
-        this.setState({QuantiteArticle:"Entrez la quantité d'article."})
+        ("Erreur","La quantité d'alerte doit etre positive.")
+        this.setState({QuantiteAlerte:"La quantité d'alerte doit etre positive."})
       }
+   
       
       else {
-        fetch('http://192.168.1.4:8080/api/articles',{
+        await fetch('http://192.168.1.10:8080/api/articles',{
         method:'post',
         mode:'no-cors',
         headers:{
@@ -112,7 +133,6 @@ import {globalStyles} from '../Model/globalStyles';
           PrixVente,
           MaxRemise,
           QuantiteAlerte,
-          QuantiteArticle
         },
         Alert.alert(
           "",
@@ -253,7 +273,7 @@ import {globalStyles} from '../Model/globalStyles';
             /> 
           
         </View>
-        <View style={globalStyles.E}>
+        <View style={[globalStyles.E,{marginBottom:25}]}>
             <View style={globalStyles.H}>
                 <Image
                       style={globalStyles.icon}
@@ -271,23 +291,7 @@ import {globalStyles} from '../Model/globalStyles';
              
         </View>
         
-        <View style={globalStyles.E}>
-            <View style={globalStyles.H}>
-                <Image
-                      style={globalStyles.icon}
-                      source={require('../img/lalaw.png')}
-                />
-                <Text style={globalStyles.sousTitre}>Quantité</Text>
-            </View>
-            <TextInput
-            placeholder='0'
-            style={globalStyles.TextInput}
-           label='QuantiteArticle'
-           onChangeText={QuantiteArticle=> this.setState({QuantiteArticle})}
-           keyboardType='numeric'
-            /> 
-              
-        </View>
+       
         
         
 

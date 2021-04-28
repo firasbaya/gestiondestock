@@ -9,37 +9,10 @@ import {
   Keyboard,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Formik } from 'formik';
-import * as yup from 'yup';
+
 import {globalStyles} from '../Model/globalStyles';
 
- const validationSchema = yup.object().shape({
-    Cin:yup
-    .number()
-    .typeError('Cin doit être un nombre')
-    .required('Ce champs est obligatoire.'),
-    Nom: yup
-      .string()
-      .label('')
-      .required('Ce champs est obligatoire.'),
-    Adresse: yup
-      .string()
-      .label('')
-      .required('Ce champs est obligatoire.'),
-     Téléphone: yup
-      .string()
-      .label('')
-      .required('Ce champs est obligatoire.'),
-      Email: yup
-      .string()
-      .email('Email non valide')
-      .label('')
-      .required('Ce champs est obligatoire.'),
-      /* Crédit:yup
-      .number()
-      .typeError('Crédit doit être un nombre')
-      .required('Ce champs est obligatoire.'), */
-  });
+
 
 
   class Client extends React.Component{
@@ -53,7 +26,7 @@ import {globalStyles} from '../Model/globalStyles';
       Adresse:'',
       Telephone:'',
       Email:'',
-      //Crédit:'',
+      
       };
     
       this.Submit=this.Submit.bind(this);
@@ -62,32 +35,61 @@ import {globalStyles} from '../Model/globalStyles';
     this.onAdresseHandler= (Adresse) => this.setState({Adresse});
     this.onTelephoneHandler= (Telephone) => this.setState({Telephone});
     this.onEmailHandler= (Email)=> this.setState({Email});
-  // this.onCréditHandler=(Crédit)=> this.setState({Crédit});
+ 
     }
     
     Submit (){
-      const objet={   
-      Cin:this.state.Cin,
-      Nom:this.state.Nom,
-      Adresse:this.state.Adresse,
-      Telephone:this.state.Telephone,
-      Email:this.state.Email,
-      //Crédit:this.state.Crédit,
-  
-   }
-   
-   //alert(JSON.stringify(objet));
-   Alert.alert(
-    "",
-    "Le Client" + " " + objet.Nom + ' a bien été ajouté.' ,
-    [
+      let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+      const {Cin,Nom,Adresse,Telephone,Email}=this.state;
+      if(Cin==""){
+        Alert.alert("Erreur",'Entrez le numéro de CIN du client.');
+        this.setState({Cin:'Entrez le numéro de CIN du client.'})
+      }
+      else if (Cin.length<8 || Cin.length>8)
+        {
+           Alert.alert 
+           ("Erreur","Le CIN du client doit contenir 8 chiffres.")
+          this.setState({Cin:"Le CIN du client doit contenir 8 chiffres."})}
+     
+          else if (Nom===""){
+        Alert.alert("Erreur",'Entrez le nom du client.')
+        this.setState({Nom:'Entrez le nom du client.'})
+      }
+      else if (Adresse===""){
+        Alert.alert("Erreur","Entrez l'adresse du client.")
+        this.setState({Adresse:"Entrez l'adresse du client."})
+      }
+      else if (Adresse.length<4)
+      {
+         Alert.alert 
+         ("Erreur","Le format doit etre comme suit :" +"\n" +"xxxx sousse.")
+        this.setState({Adresse:"Le format doit etre comme suit : xx rue xx sousse."})}
       
-      { text: "OK", onPress: () => console.log("OK Pressed") }
-    ]
-  );
-    
-
-  fetch('http://192.168.1.9:8080/api/clients',{
+      else if (Telephone===""){
+        Alert.alert("Erreur","Entrez le numéro de téléphone du client.")
+        this.setState({Telephone:"Entrez le numéro de téléphone du client."})
+      }
+      else if (Telephone.length<8 || Telephone.length>8)
+      {
+         Alert.alert 
+         ("Erreur","Le numéro de téléphone doit contenir 8 chiffres.")
+        this.setState({Telephone:"Le CIN du fournisseur doit contenir 8 chiffres."})}
+      
+      else if (Email===""){
+        Alert.alert("Erreur","Entrez l'adresse E-mail du client.")
+        this.setState({Email:"Entrez l'adresse E-mail du client."})
+      }
+      else if(reg.test(Email) === false)
+      {
+        Alert.alert
+        ("Erreur","Le format de l'email est incorrect.");
+        this.setState({Email:"Le format de l'Email est incorrect."})
+        return false;
+        }
+        
+  
+   else {
+  fetch('http://192.168.1.19:8080/api/clients',{
     method:'post',
     mode:'no-cors',
     headers:{
@@ -95,15 +97,20 @@ import {globalStyles} from '../Model/globalStyles';
       'Content-Type':'application/json'
     },
     body:JSON.stringify({
-      Cin:objet.Cin,
-      Nom:objet.Nom,
-      Adresse:objet.Adresse,
-      Telephone:objet.Telephone,
-      Email:objet.Email,
-      //Crédit:objet.Crédit,
-    })
-
-  })}
+      Cin,
+      Nom,
+      Adresse,
+      Telephone,
+      Email
+    },
+    Alert.alert(
+      "",
+      "Le Client" + " " + Nom + ' a bien été ajouté.' ,
+      [
+        
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+      ))})}}
 
     render(){
       return (
@@ -111,18 +118,7 @@ import {globalStyles} from '../Model/globalStyles';
       
       
     <ScrollView>
-    <Formik
-      initialValues={{Cin:'',Nom:'' ,Adresse:'',Téléphone:'',Email:''}}
-      onSubmit={(values, actions) => {
-        alert(JSON.stringify(values));
-        setTimeout(() => {
-          actions.setSubmitting(false);
-        }, 1000);
-      }}
-      validationSchema={validationSchema}
-    >
-      {(formikProps) => (
-        <React.Fragment>
+   
         
         <View style={globalStyles.Body}>
             <View style={globalStyles.H}>
@@ -137,13 +133,11 @@ import {globalStyles} from '../Model/globalStyles';
             placeholder='12834689'
              label='Cin'
             style={globalStyles.TextInput}
-            onChangeText={this.onCinHandler}
-            onBlur={formikProps.handleBlur('Cin')}
+            onChangeText={Cin => this.setState({Cin})}
+           
             keyboardType='numeric'
            />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Cin && formikProps.errors.Cin}
-            </Text>    
+     
         </View>
 
         <View style={globalStyles.E}>
@@ -157,14 +151,11 @@ import {globalStyles} from '../Model/globalStyles';
             <TextInput
             placeholder='Khaled'
             label='Nom'
-            onChangeText={this.onNomHandler}
+            onChangeText={Nom=> this.setState({Nom})}
             style={globalStyles.TextInput}
-            //onChangeText={formikProps.handleChange('Nom')}
-            onBlur={formikProps.handleBlur('Nom')}
+            
             />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Nom && formikProps.errors.Nom}
-            </Text>      
+   
         </View>
         <View style={globalStyles.E}>
             <View style={globalStyles.H}>
@@ -179,14 +170,11 @@ import {globalStyles} from '../Model/globalStyles';
             style={globalStyles.TextInput}
              label='Adresse'
             
-            onChangeText={this.onAdresseHandler} 
-            //onChangeText={formikProps.handleChange('Adresse')}
-            onBlur={formikProps.handleBlur('Adresse')}
+            onChangeText={Adresse => this.setState({Adresse})} 
+            
+          
           />
-
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Adresse && formikProps.errors.Adresse}
-            </Text>      
+      
         </View>
 
         <View style={globalStyles.E}>
@@ -201,15 +189,12 @@ import {globalStyles} from '../Model/globalStyles';
             placeholder='53570050'
             style={globalStyles.TextInput}
             label='Téléphone'
-            onChangeText={this.onTelephoneHandler} 
-            //onChangeText={formikProps.handleChange('Téléphone')}
-            onBlur={formikProps.handleBlur('Téléphone')}
+            onChangeText={Telephone => this.setState({Telephone})}
+            
+      
             keyboardType='numeric'
             />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Téléphone && formikProps.errors.Téléphone
-              }
-            </Text>      
+                
         </View>
        
         <View style={globalStyles.E}>
@@ -224,22 +209,18 @@ import {globalStyles} from '../Model/globalStyles';
             placeholder='FamilyBusiness@gmail.com'
             style={globalStyles.TextInput}
              label='Email'
-            onChangeText={this.onEmailHandler} 
-            //onChangeText={formikProps.handleChange('Email')}
-            onBlur={formikProps.handleBlur('Email')}
+            onChangeText={Email => this.setState({Email})}
+   
             keyboardType='email-address'
             />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Email && formikProps.errors.Email}
-            </Text>      
+              
      </View>
      
        
        
-        </React.Fragment>
-      )}
       
-    </Formik>
+      
+    
         
   
       

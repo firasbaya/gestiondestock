@@ -26,7 +26,7 @@ import {globalStyles} from '../Model/globalStyles';
       };
       this.Submit=this.Submit.bind(this);
     }
-    Submit= () => {
+    Submit= async() => {
       const             { 
         email,
         password,
@@ -61,8 +61,8 @@ import {globalStyles} from '../Model/globalStyles';
       }
       else if (nom===""){
         Alert.alert
-        ("Erreur",'Entrez votre nom.')
-        this.setState({nom:'Entrez votre nom.'})
+        ("Erreur",'Entrez le nom du magasinier.')
+        this.setState({nom:'Entrez le nom du magasinier.'})
       }
     
         else if (cin.length<8 || cin.length>8)
@@ -73,13 +73,13 @@ import {globalStyles} from '../Model/globalStyles';
           
           else if (telephone===""){
             Alert.alert
-            ("Erreur","Entrez votre numéro.")
-            this.setState({telephone:"Entrez votre numéro."})}
+            ("Erreur","Entrez le numéro de téléphone.")
+            this.setState({telephone:"Entrez le numéro de téléphone."})}
           
             else if (telephone.length<8 || telephone.length>8)
             {
                Alert.alert 
-               ("Erreur","Le numéro  doit contenir 8 chiffres.")
+               ("Erreur","Le numéro de téléphone doit contenir 8 chiffres.")
               this.setState({telephone:"Le numéro de téléphone doit contenir 8 chiffres."})}
             
 
@@ -93,11 +93,11 @@ import {globalStyles} from '../Model/globalStyles';
       {
          Alert.alert 
          ("Erreur","Le format doit etre comme suit :" +"\n" +"xxxx sousse.")
-        this.setState({telephone:"Le format doit etre comme suit : xx rue xx sousse."})}
+        this.setState({adresse:"Le format doit etre comme suit : xx rue xx sousse."})}
       
 
       else {
-        fetch('http://192.168.1.4:8080/api/auth/signup',{
+        await fetch('http://192.168.1.10:8080/api/auth/signup',{
         method:'post',
         mode:'no-cors',
         headers:{

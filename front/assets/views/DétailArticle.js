@@ -42,11 +42,9 @@ QuantiteArticle:this.setState({QuantiteArticle:''}),
 modalVisible: false,
 modalCommanderVisible: false,
 };
+this.remove=this.remove.bind(this);
 this.Submit=this.Submit.bind(this);
-this.onDesginationHandler= (Designation) => this.setState({Designation});
-this.onMarqueHandler= (Marque) => this.setState({Marque});
 this.onId_fournisseurHandler= (Id_fournisseur) => this.setState({Id_fournisseur});
-this.onCategorieHandler= (Categorie)=> this.setState({Categorie});
 this.onPrixAchatHandler= (PrixAchat)=> this.setState({PrixAchat});
 this.onPrixVenteHandler= (PrixVente) => this.setState({PrixVente});
 this.onMaxRemiseHandler= (MaxRemise) => this.setState({MaxRemise});
@@ -54,11 +52,8 @@ this.onQuantiteAlerteHandler= (QuantiteAlerte) => this.setState({QuantiteAlerte}
 this.onQuantiteArticleHandler= (QuantiteArticle) => this.setState({QuantiteArticle});
 }
 
-Submit (){
+Submit =async ()=>{
   const  objet={   
-  Designation:this.state.Designation,
-  Marque:this.state.Marque,
-  Categorie:this.state.Categorie,
   Id_fournisseur:this.state.Id_fournisseur,
   PrixAchat:this.state.PrixAchat,
   PrixVente:this.state.PrixVente,
@@ -67,6 +62,77 @@ Submit (){
   QuantiteArticle:this.state.QuantiteArticle,
 
 }
+if (this.state.QuantiteArticle===""){
+  Alert.alert
+  ("Erreur","Entrez la quantité d'article.")
+  this.setState({QuantiteArticle:"Entrez la quantité d'article."})
+}
+else if (this.state.MaxRemise===""){
+  Alert.alert
+  ("Erreur","Entrez le taux de remise.")
+  this.setState({MaxRemise:"Entrez le taux de remise."})
+}
+else if (this.state.Id_fournisseur===""){
+  Alert.alert
+  ("Erreur","Entrez le numéro CIN du fournisseur.")
+  this.setState({Id_fournisseur:"Entrez le numéro CIN du fournisseur."})
+}
+else if (this.state.PrixAchat===""){
+  Alert.alert
+  ("Erreur","Entrez le prix d'achat.")
+  this.setState({PrixAchat:"Entrez le prix d'achat."})
+}
+else if (this.state.PrixVente===""){
+  Alert.alert
+  ("Erreur","Entrez le prix de vente.")
+  this.setState({PrixVente:"Entrez le prix de vente."})
+}
+else if (this.state.PrixVente<=0){
+  Alert.alert
+  ("Erreur","Prix de vente doit etre superieur a 0.")
+  this.setState({PrixVente:"Prix de vente doit etre superieur a 0."})
+}
+else if (this.state.PrixAchat<=0){
+  Alert.alert
+  ("Erreur","Prix de vente doit etre superieur a 0.")
+  this.setState({PrixAchat:"Prix de vente doit etre superieur a 0."})
+}
+else if (this.state.PrixVente<this.state.PrixAchat){
+  Alert.alert
+  ("Erreur","Le prix de vente doit etre supérieur aux prix d'achat.")
+  this.setState({PrixVente:"Le prix de vente doit etre supérieur aux prix d'achat."})
+}
+
+else if (this.state.QuantiteAlerte===""){
+  Alert.alert
+  ("Erreur","Entrez la quantité d'alerte.")
+  this.setState({QuantiteAlerte:"Entrez la quantité d'alerte."})
+}
+
+
+else {
+const _id=this.props.route.params.item._id;
+const apiUrl='http://192.168.1.10:8080/api/articles';
+
+await fetch(apiUrl + "/" + _id, {
+  method:'put',
+  mode:'no-cors',
+  headers:{
+    'Accept':'application/json',
+    'Content-Type':'application/json'
+  },
+  body:JSON.stringify({
+    Id_fournisseur:objet.Id_fournisseur,
+    PrixAchat:objet.PrixAchat,
+    PrixVente:objet.PrixVente,
+    MaxRemise:objet.MaxRemise,
+    QuantiteAlerte:objet.QuantiteAlerte,
+    QuantiteArticle:objet.QuantiteArticle
+  })
+
+}
+
+)
 Alert.alert(
   "",
   "L'article" + " " + this.props.route.params.item.Designation + ' a bien été modifié.' ,
@@ -76,32 +142,13 @@ Alert.alert(
 
   ]
 );
-  
-const _id=this.props.route.params.item._id;
-const apiUrl='http://192.168.1.4:8080/api/articles';
-
-fetch(apiUrl + "/" + _id, {
-  method:'put',
-  mode:'no-cors',
-  headers:{
-    'Accept':'application/json',
-    'Content-Type':'application/json'
-  },
-  body:JSON.stringify({
-  
-    Id_fournisseur:objet.Id_fournisseur,
-    PrixAchat:objet.PrixAchat,
-    PrixVente:objet.PrixVente,
-    MaxRemise:objet.MaxRemise,
-    QuantiteAlerte:objet.QuantiteAlerte,
-    QuantiteArticle:objet.QuantiteArticle
-  })
-
-})
 }
-
-remove=()=>{
+}
+remove= async ()=>{
+  const _id=this.props.route.params.item._id;
+  const apiUrl='http://192.168.1.10:8080/api/articles';
   Alert.alert(
+
     //title
     'Confirmez votre choix',
     //body
@@ -113,8 +160,14 @@ remove=()=>{
           method: 'DELETE',
           mode:'no-cors',
         }).then(() => {
-           console.log('removed');
-        }).catch(err => {
+          Alert.alert(
+            "Message de confirmation",
+            "Article supprimé.",
+            [
+              
+              { text: "OK", onPress: () => this.props.navigation.navigate('listArticle') }
+            ]
+          );         }).catch(err => {
           console.error(err)
         })
       },
@@ -128,7 +181,7 @@ remove=()=>{
   );
 
 
- .3
+ 
 }
 
 
@@ -297,7 +350,6 @@ source={require('../img/Articleimagee.jpg')}                    />
                   label='Désignation'
                   editable={false}
                   defaultValue={this.props.route.params.item.Designation}
-                  onChangeText={this.onDesignationHandler}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:30,color:'#31326f'}]}
                   
 />
@@ -317,7 +369,6 @@ source={require('../img/Articleimagee.jpg')}                    />
                   label='Marque'
                   editable={false}
                   defaultValue={this.props.route.params.item.Marque}
-                  onChangeText={this.onMarqueHandler}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:30,color:'#31326f'}]}
               />        
               <View style={{height:1,width:'100%',backgroundColor:'#ccc',marginBottom:5,marginTop:7}}></View>
@@ -337,7 +388,6 @@ source={require('../img/Articleimagee.jpg')}                    />
                   defaultValue={this.props.route.params.item.Categorie}
                   label='Catégorie'
                   editable={false}
-                  onChangeText={this.onCategorieHandler}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:30,color:'#31326f'}]}
               />        
                         <View style={{height:1,width:'100%',backgroundColor:'#ccc',marginBottom:5,marginTop:7}}></View>
@@ -423,12 +473,12 @@ source={require('../img/Articleimagee.jpg')}                    />
                       style={globalStyles.icon}
                       source={require('../img/venven.png')}
                 />
-           <Text style={[globalStyles.sousTitre1,{color:'#ff8303'}]}>ID Fournisseur:</Text>
+           <Text style={[globalStyles.sousTitre1,{color:'#ff8303'}]}>CIN Fournisseur:</Text>
       </View>
          
                 <TextInput
                   defaultValue={this.props.route.params.item.Id_fournisseur.toString()}
-                  label='ID Fournisseur'
+                  label='Id Fournisseur'
                   keyboardType='numeric'
                   onChangeText={this.onId_fournisseurHandler}
                   style={[globalStyles.TextInput,{fontSize:20,fontWeight:'bold',color:'#31326f'}]}
@@ -656,7 +706,7 @@ source={{uri:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMTEhU
                       style={globalStyles.icon}
                       source={require('../img/venven.png')}
                 />    
-                <Text style={[globalStyles.sousTitre1,{color:'#ff8303'}]}>ID Fournisseur:</Text>
+                <Text style={[globalStyles.sousTitre1,{color:'#ff8303'}]}>CIN Fournisseur:</Text>
               </View>
               <Text style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}> {this.props.route.params.item.Id_fournisseur.toString()} </Text>
 

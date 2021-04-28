@@ -9,34 +9,6 @@ import {
 } from 'react-native';
 import {globalStyles} from '../Model/globalStyles';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Formik } from 'formik';
-import * as yup from 'yup';
-
-const validationSchema = yup.object().shape({
-  Cin:yup
-  .number()
-  .typeError('Cin doit être un nombre')
-  .required('Ce champs est obligatoire.'),
-  Nom: yup
-      .string()
-      .label('')
-      .required('Ce champs est obligatoire.'),
-  Adresse: yup
-      .string()
-      .label('')
-      .required('Ce champs est obligatoire.'),
-  Téléphone: yup
-      .string()
-      .label('')
-      .required('Ce champs est obligatoire.'),
-  Email: yup
-      .string()
-      .email('Email non valide')
-      .label('')
-      .required('Ce champs est obligatoire.'),
-
-  });
-
 
 
   class Fournisseur extends React.Component{
@@ -60,28 +32,57 @@ const validationSchema = yup.object().shape({
    
     }
     Submit (){
-      const objet={   
-      Cin:this.state.Cin,
-      Nom:this.state.Nom,
-      Adresse:this.state.Adresse,
-      Telephone:this.state.Telephone,
-      Email:this.state.Email,
-  
-   }
-   //alert(JSON.stringify(objet));
-   Alert.alert(
-    "",
-    "Le Fournisseur" + " " + objet.Nom  + ' a bien été ajouté.' ,
-    [
       
-      { text: "OK", onPress: () => console.log("OK Pressed") }
-    ]
-  );
+      let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+      const {Cin,Nom,Adresse,Telephone,Email}=this.state;
+      if(Cin==""){
+        Alert.alert("Erreur",'Entrez le numéro de CIN du fournisseur.');
+        this.setState({Cin:'Entrez le CIN.'})
+      }
+      else if (Cin.length<8 || Cin.length>8)
+        {
+           Alert.alert 
+           ("Erreur","Le numéro de CIN doit contenir 8 chiffres.")
+          this.setState({Cin:"Le CIN du client doit contenir 8 chiffres."})}
+      else if (Nom===""){
+        Alert.alert("Erreur",'Entrez le nom du fournisseur.')
+        this.setState({Nom:'Entrez le nom du client.'})
+      }
+      else if (Adresse===""){
+        Alert.alert("Erreur","Entrez l'adresse du client.")
+        this.setState({Adresse:"Entrez l'adresse du client."})
+      }
+      else if (Adresse.length<4)
+      {
+         Alert.alert 
+         ("Erreur","Le format doit etre comme suit :" +"\n" +"xxxx sousse.")
+        this.setState({Adresse:"Le format doit etre comme suit : xxxx sousse."})}
     
-
-
-
-   fetch('http://192.168.1.2:8080/api/fournisseurs',{
+      else if (Telephone===""){
+        Alert.alert("Erreur","Entrez le numéro de téléphone du fournisseur.")
+        this.setState({Telephone:"Entrez le numéro de téléphone du fournisseur."})
+      }
+      else if (Telephone.length<8 || Telephone.length>8)
+      {
+         Alert.alert 
+         ("Erreur","Le numéro de téléphone doit contenir 8 chiffres.")
+        this.setState({Telephone:"Le numéro de téléphone doit contenir 8 chiffres."})}
+      
+      else if (Email===""){
+        Alert.alert("Erreur","Entrez l'adresse E-mail du fournisseur.")
+        this.setState({Email:"Entrez l'adresse E-mail du fournisseur."})
+      }
+      else if(reg.test(Email) === false)
+      {
+        Alert.alert
+        ("Erreur","Le format de l'email est incorrect.");
+        this.setState({Email:"Le format de l'Email est incorrect."})
+        return false;
+        }
+        
+  
+   else {
+  fetch('http://192.168.1.19:8080/api/fournisseurs',{
     method:'post',
     mode:'no-cors',
     headers:{
@@ -89,32 +90,28 @@ const validationSchema = yup.object().shape({
       'Content-Type':'application/json'
     },
     body:JSON.stringify({
-      Cin:objet.Cin,
-      Nom:objet.Nom,
-      Adresse:objet.Adresse,
-      Telephone:objet.Telephone,
-      Email:objet.Email,
-    })
+      Cin,
+      Nom,
+      Adresse,
+      Telephone,
+      Email
+    },
+    Alert.alert(
+      "Message de confirmation",
+      "Le fournisseur" + " " + Nom + ' a bien été ajouté.' ,
+      [
+        
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+      ))})}}
 
-  })}
     render(){
       return (
 
 <View style={globalStyles.container}>
   
     <ScrollView>
-    <Formik
-      initialValues={{Cin: '', Nom: '' ,Adresse:'',Téléphone:'',Email:''}}
-      onSubmit={(values, actions) => {
-        alert(JSON.stringify(values));
-        setTimeout(() => {
-          actions.setSubmitting(false);
-        }, 1000);
-      }}
-      validationSchema={validationSchema}
-    >
-      {(formikProps) => (
-        <React.Fragment>
+    
         
         <View style={globalStyles.Body}>
             <View style={globalStyles.H}>
@@ -129,14 +126,11 @@ const validationSchema = yup.object().shape({
             placeholder='12864792'
             style={globalStyles.TextInput}
            label='Cin'
-            onChangeText={this.onCinHandler} 
-            //onChangeText={formikProps.handleChange('Cin')}
-            onBlur={formikProps.handleBlur('Cin')}
+            onChangeText={Cin => this.setState({Cin})}
+            
             keyboardType='numeric'
             />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Cin && formikProps.errors.Cin}
-            </Text>    
+               
         </View>
 
         <View style={globalStyles.E}>
@@ -151,13 +145,10 @@ const validationSchema = yup.object().shape({
             placeholder='Emir'
             style={globalStyles.TextInput}
             label='Nom'
-            onChangeText={this.onNomHandler} 
-            //onChangeText={formikProps.handleChange('Nom')}
-            onBlur={formikProps.handleBlur('Nom')}
+            onChangeText={Nom=> this.setState({Nom})}
+           
             />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Nom && formikProps.errors.Nom}
-            </Text>      
+               
         </View>
         <View style={globalStyles.E}>
             <View style={globalStyles.H}>
@@ -171,14 +162,9 @@ const validationSchema = yup.object().shape({
             placeholder='30 Rue la douceur'
             style={globalStyles.TextInput}
             label='Adresse'
-            onChangeText={this.onAdresseHandler} 
-            //onChangeText={formikProps.handleChange('Adresse')}
-            onBlur={formikProps.handleBlur('Adresse')}
-            />
-
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Adresse && formikProps.errors.Adresse}
-            </Text>      
+            onChangeText={Adresse => this.setState({Adresse})} 
+           
+            />    
         </View>
 
         <View style={globalStyles.E}>
@@ -193,16 +179,13 @@ const validationSchema = yup.object().shape({
             placeholder='53570050'
             style={globalStyles.TextInput}
              label='Téléphone'
-            onChangeText={this.onTelephoneHandler} 
-            //onChangeText={formikProps.handleChange('Téléphone')}
-            onBlur={formikProps.handleBlur('Téléphone')}
+            onChangeText={Telephone => this.setState({Telephone})}
+            
             keyboardType='numeric'
             
             />
            
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Téléphone && formikProps.errors.Téléphone}
-            </Text>      
+      
         </View>
        
         <View style={globalStyles.E}>
@@ -218,20 +201,14 @@ const validationSchema = yup.object().shape({
             style={globalStyles.TextInput}
              label='Email'
              keyboardType='email-address'
-            onChangeText={this.onEmailHandler}
-            //onChangeText={formikProps.handleChange('Email')}
-            onBlur={formikProps.handleBlur('Email')}
+            onChangeText={Email => this.setState({Email})}
+           
             />
-            <Text style={{ color: 'red' }}>
-              {formikProps.touched.Email && formikProps.errors.Email}
-            </Text>      
+           
      </View>
        
        
-        </React.Fragment>
-      )}
-      
-    </Formik>
+       
         
     <View style={{fontSize:20}}>
     <Button title='Ajouter' 

@@ -25,7 +25,6 @@ class validerEntrée extends React.Component{
         };
     
     this.Submit=this.Submit.bind(this);
-    this.onDesginationHandler= (Designation) => this.setState({Designation});
     this.onQuantiteArticleHandler= (QuantiteArticle) => this.setState({QuantiteArticle});
     }
     componentDidMount()
@@ -34,7 +33,7 @@ class validerEntrée extends React.Component{
     }
     getData = async () => {
       const _id=this.props.route.params.item._id;
-  const apiUrl='http://192.168.1.2:8080/api/articles';
+  const apiUrl='http://192.168.1.10:8080/api/articles';
    await fetch(apiUrl + "/" + _id, {
     method:'get',
     mode:'no-cors',
@@ -55,35 +54,49 @@ class validerEntrée extends React.Component{
     })
 
   }
-    Submit (){
+    Submit = async () => {
       const  objet={   
       Designation:this.state.Designation,
       QuantiteArticle:this.state.QuantiteArticle,
    }
-   Alert.alert(
-    "",
-    "La quantité de l'article" + " " + this.state.dataSource.Designation  + " " + 'a bien été ajouté.' ,
-    [
-      
-      { text: "OK", onPress: () => console.log("OK Pressed") }
-    ]
-  );
-  const _id=this.props.route.params.item._id;
-  const apiUrl='http://192.168.1.2:8080/api/articles';
-  fetch(apiUrl + "/" + _id, {
-    method:'put',
-    mode:'no-cors',
-    headers:{
-      'Accept':'application/json',
-      'Content-Type':'application/json'
-    },
-    body:JSON.stringify({
-      QuantiteArticle: Number(objet.QuantiteArticle) + this.state.dataSource.QuantiteArticle
-    })
-  })
-  this.getData();
+   if (this.state.QuantiteArticle===""){
+    Alert.alert
+    ("Erreur","Entrez la quantité d'article.")
+    this.setState({QuantiteArticle:"Entrez la quantité d'article."})
+  }
+  else if (this.state.QuantiteArticle<=0){
+    Alert.alert
+    ("Erreur","La quantité d'article doit etre supérieur à 0.")
+    this.setState({QuantiteArticle:"La quantité d'article doit etre supérieur à 0."})
+  }
+  else{
+    const _id=this.props.route.params.item._id;
+    const apiUrl='http://192.168.1.10:8080/api/articles';
+    await fetch(apiUrl + "/" + _id, {
+      method:'put',
+      mode:'no-cors',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        QuantiteArticle: Number(objet.QuantiteArticle) + this.state.dataSource.QuantiteArticle
+      },
+    
+      Alert.alert(
+      "",
+      "La quantité de l'article" + " " + this.state.dataSource.Designation  + " " + 'a bien été ajouté.' ,
+      [
+        
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    )
+    )})
+    this.getData();
+  
+  }}
+ 
 
-}
     render(){
         const position=new Animated.ValueXY({x:0,y:0})
         Animated.timing(position,{
@@ -124,9 +137,7 @@ source={require('../img/instock.png')}
            </Animated.View>
      
 <View style={{height:550,padding:20,}}>
-
-{/* {this.state.fontLoaded?(
- */}    
+ 
 <TextAnimator
         content="️️️Arrivage de marchandises" 
         textStyle={[globalStyles.textStyle,{color:'#ffe268',fontSize:26,}]}

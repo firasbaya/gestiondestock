@@ -38,35 +38,62 @@ modalVisible: false,
 };
 this.Submit=this.Submit.bind(this);
 this.remove=this.remove.bind(this);
-this.onCinHandler=(Cin) => this.setState({Cin})
-this.onNomHandler= (Nom) => this.setState({Nom});
 this.onAdresseHandler= (Adresse) => this.setState({Adresse});
 this.onTelephoneHandler= (Telephone) => this.setState({Telephone});
 this.onEmailHandler= (Email)=> this.setState({Email});
 }
 
-Submit (){
+Submit = async ()=>{
 const objet={   
-Cin:this.state.Cin,
-Nom:this.state.Nom,
 Adresse:this.state.Adresse,
 Telephone:this.state.Telephone,
 Email:this.state.Email,
 
 }
-Alert.alert(
-  "",
-  "Le Fournisseur" + " " + this.props.route.params.item.Nom+ ' a bien été modifié.' ,
-  [
-    
-    { text: "OK", onPress: () => console.log("OK Pressed") }
-  ]
-);
-  
-const _id=this.props.route.params.item._id;
-const apiUrl='http://192.168.1.2:8080/api/fournisseurs';
+let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
 
-fetch(apiUrl + "/" + _id, {
+   if (this.state.Adresse===""){
+    Alert.alert
+    ("Erreur","Entrez l'adresse du fournisseur.")
+    this.setState({Adresse:"Entrez l'adresse du fournisseur."})
+  }
+  else if (this.state.Adresse.length<4)
+  {
+     Alert.alert 
+     ("Erreur","Le format doit etre comme suit :" +"\n" +"xxxx sousse.")
+    this.setState({Adresse:"Le format doit etre comme suit : xxxx sousse."})}
+  
+
+  else if (this.state.Telephone===""){
+    Alert.alert
+    ("Erreur","Entrez le numéro du fournisseur.")
+    this.setState({Telephone:"Entrez le numéro du fournisseur."})}
+  
+    else if (this.state.Telephone.length<8 || this.state.Telephone.length>8)
+    {
+       Alert.alert 
+       ("Erreur","Le numéro de téléphone doit contenir 8 chiffres.")
+      this.setState({Telephone:"Le numéro de téléphone doit contenir 8 chiffres."})}
+      
+      else if(this.state.Email==""){
+        alert("Entrez l'Email du fournisseur.");
+        this.setState({Email:"Entrez l'Email du fournisseur."})
+        
+      }
+      
+      else if(reg.test(this.state.Email) === false)
+      {
+      alert("Email incorrecte.");
+      this.setState({Email:'Email incorrecte.'})
+      return false;
+        }
+        else {
+
+
+const _id=this.props.route.params.item._id;
+const apiUrl='http://192.168.1.19:8080/api/fournisseurs';
+
+ await fetch(apiUrl + "/" + _id, {
   method:'put',
   mode:'no-cors',
   headers:{
@@ -78,10 +105,21 @@ fetch(apiUrl + "/" + _id, {
     Telephone:objet.Telephone,
     Email:objet.Email,
   })
-
-})}
-remove=()=>{
+ })
+ Alert.alert(
+  "",
+  "Le Client" + " " + this.props.route.params.item.Cin + ' a bien été modifié.' ,
+  [
+    
+    { text: "OK", onPress: () => console.log("OK Pressed") }
+  ]
+);
+}}
+remove= async ()=>{
+  const _id=this.props.route.params.item._id;
+  const apiUrl='http://192.168.1.19:8080/api/fournisseurs';
   Alert.alert(
+
     //title
     'Confirmez votre choix',
     //body
@@ -93,7 +131,15 @@ remove=()=>{
           method: 'DELETE',
           mode:'no-cors',
         }).then(() => {
-           console.log('removed');
+          Alert.alert(
+            "Message de confirmation",
+            "Fournisseur supprimé.",
+            [
+              
+              { text: "OK", onPress: () => this.props.navigation.navigate('listFournisseur') }
+            ]
+          );          
+           
         }).catch(err => {
           console.error(err)
         })
@@ -107,8 +153,9 @@ remove=()=>{
     //clicking out side of alert will not cancel
   );
 
-  const _id=this.props.route.params.item._id;
-  const apiUrl='http://192.168.1.2:8080/api/fournisseurs';
+
+ 
+
   }
 
 

@@ -22,7 +22,7 @@ class AdminScreen extends React.Component{
 		}
     this.login = this.login.bind(this)
 	}
-  login = () =>{
+  login = async() =>{
 		const {email,password} = this.state;
 		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
     if(email==""){
@@ -44,7 +44,7 @@ class AdminScreen extends React.Component{
    
 		else{
   
-		fetch('http://192.168.1.4:8080/api/auth/signin',{
+		await fetch('http://192.168.1.10:8080/api/auth/signin',{
       method:'post',
       mode:'no-cors',
       headers:{

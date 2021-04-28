@@ -38,15 +38,14 @@ modalVisible: false,
 
 };
 this.Submit=this.Submit.bind(this);
-this.onCinHandler=(Cin) => this.setState({Cin})
-this.onNomHandler= (Nom) => this.setState({Nom});
+this.remove=this.remove.bind(this);
 this.onAdresseHandler= (Adresse) => this.setState({Adresse});
 this.onTéléphoneHandler= (Téléphone) => this.setState({Téléphone});
 this.onEmailHandler= (Email)=> this.setState({Email});
 this.onPasswordHandler= (Password) => this.setState({Password});
 }
 
-Submit (){
+Submit = async ()=>{
 const objet={   
 Adresse:this.state.Adresse,
 Téléphone:this.state.Téléphone,
@@ -54,19 +53,60 @@ Email:this.state.Email,
 Password:this.state.Password
 
 }
-Alert.alert(
-  "",
-  "Le Magasinier" + " " + this.props.route.params.item.Cin + ' a bien été modifié.' ,
-  [
-    
-    { text: "OK", onPress: () => console.log("OK Pressed") }
-  ]
-);
-const _id=this.props.route.params.item._id;
-const apiUrl='http://192.168.1.2:8080/api/magasiniers';
+let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+
+   if (this.state.Adresse===""){
+    Alert.alert
+    ("Erreur","Entrez l'adresse du magasinier.")
+    this.setState({Adresse:"Entrez l'adresse du magasinier."})
+  }
+ /*   else if (this.state.Adresse.length<8)
+  {
+     Alert.alert 
+     ("Erreur","Le format doit etre comme suit :" +"\n" +"xxxx sousse.")
+    this.setState({Adresse:"Le format doit etre comme suit : xxxx sousse."})}
+    */
+
+  else if (this.state.Téléphone===""){
+    Alert.alert
+    ("Erreur","Entrez le numéro du magasinier.")
+    this.setState({Téléphone:"Entrez le numéro du magasinier."})}
+  
+  /*   else if (this.state.Téléphone.length<8 || this.state.Téléphone.length>8)
+    {
+       Alert.alert 
+       ("Erreur","Le numéro de téléphone doit contenir 8 chiffres.")
+      this.setState({Téléphone:"Le numéro de téléphone doit contenir 8 chiffres."})}
+        */
+      else if(this.state.Email==""){
+        alert("Entrez l'Email du client.");
+        this.setState({Email:"Entrez l'Email du magasinier."})
+        
+      }
+      
+      else if(reg.test(this.state.Email) === false)
+      {
+      alert("Email incorrecte.");
+      this.setState({Email:'Email incorrecte.'})
+      return false;
+        }
+      else if (this.state.Password===""){
+        Alert.alert
+        ("Erreur","Entrez un mot de passe.")
+        this.setState({Password:"Entrez un mot de passe."})
+      }
+   /*     else if (this.state.Password.length<4){
+      
+         Alert.alert 
+         ("Erreur","Mot de passe trés court.")
+        this.setState({Password:"Mot de passe trés court."})}
+  */
+      else{
+        const _id=this.props.route.params.item._id;
+const apiUrl='http://192.168.1.10:8080/api/magasiniers';
 
 fetch(apiUrl + "/" + _id, {
-  method:'post',
+  method:'put',
   mode:'no-cors',
   headers:{
     'Accept':'application/json',
@@ -80,15 +120,28 @@ fetch(apiUrl + "/" + _id, {
     Password:objet.Password,
   })
 
-})}
-remove(){
+}
+)
+Alert.alert(
+  "",
+  "Le Magasinier" + " " + this.props.route.params.item.Cin + ' a bien été modifié.' ,
+  [
+    
+    { text: "OK", onPress: () => console.log("OK Pressed") }
+  ]
+);
+
+}}
+
+
+remove= async()=>{
   const _id=this.props.route.params.item._id;
-   const apiUrl='http://192.168.1.2:8080/api/magasiniers';
+   const apiUrl='http://192.168.1.10:8080/api/magasiniers';
   fetch(apiUrl + "/" + _id, {
     method: 'DELETE',
     mode:'no-cors',
   }).then(() => {
-     console.log('removed');
+    alert("Message de confirmation","Magasinier Supprimé."), this.props.navigation.navigate('listMagasinier');
   }).catch(err => {
     console.error(err)
   });
@@ -103,27 +156,7 @@ remove(){
  render(){
    
   const { modalVisible } = this.state;
-  const alertSupprimer =() => {
-    Alert.alert(
-      //title
-      'Confirmez votre choix',
-      //body
-      'Voulez-vous vraiment supprimer ce magasinier?',
-      [
-        {
-          text: 'Confirmer',
-          onPress: () => console.log('Magasinier supprimer')
-        },
-        {
-          text: 'Annuler',
-          onPress: () => console.log('Cancel'), style: 'cancel'
-        },
-      ],
-      {cancelable: false},
-      //clicking out side of alert will not cancel
-    );
-  
-  }
+
     
     const position=new Animated.ValueXY({x:0,y:0})
     Animated.timing(position,{
@@ -168,8 +201,7 @@ source={require('../img/Client.png')}
      
 <View style={{height:700,padding:20,}}>
 
-{/* {this.state.fontLoaded?(
- */}    
+
 <TextAnimator
         content="️️️Détails sur le magasinier" 
         textStyle={[globalStyles.textStyle,{color:'#ffe268'}]}
@@ -254,7 +286,6 @@ source={require('../img/Client.png')}
                   editable={false}
                   value={this.props.route.params.item.Cin}
                   keyboardType='numeric'
-                  onChangeText={this.onCinHandler}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}
                   
 />
@@ -274,7 +305,6 @@ source={require('../img/Client.png')}
                   value={this.props.route.params.item.Nom}
                   label='Nom'
                   editable={false}
-                  onChangeText={this.onNomHandler}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}
               />  
                             <View style={{height:1,width:'100%',backgroundColor:'#ccc',marginBottom:5,marginTop:7}}></View>
@@ -439,7 +469,7 @@ source={require('../img/Client.png')}
 
             <View style={[globalStyles.E,{width:140,backgroundColor:'#ffe268',borderColor:'#ffe268'}]}>
             <TouchableOpacity
-            onPress={alertSupprimer}
+            onPress={()=> this.remove()}
             >
             
               <Text style={{textAlign:'center',fontSize:17,fontWeight:'bold',}}>Supprimer</Text>

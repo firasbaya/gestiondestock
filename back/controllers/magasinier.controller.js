@@ -3,7 +3,7 @@ const db = require("../models");
 const Magasinier = db.magasiniers;
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.Cin) {
+/*   if (!req.body.Cin) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
@@ -26,7 +26,7 @@ exports.create = (req, res) => {
   if (!req.body.Password) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
-  }
+  } */
 
   // Create a Tutorial
   const magasinier = new Magasinier({

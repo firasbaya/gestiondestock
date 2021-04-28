@@ -39,8 +39,7 @@ modalVisible: false,
 
 };
 this.Submit=this.Submit.bind(this);
-this.onCinHandler=(Cin) => this.setState({Cin})
-this.onNomHandler= (Nom) => this.setState({Nom});
+this.remove=this.remove.bind(this);
 this.onAdresseHandler= (Adresse) => this.setState({Adresse});
 this.onTelephoneHandler= (Telephone) => this.setState({Telephone});
 this.onEmailHandler= (Email)=> this.setState({Email});
@@ -49,32 +48,68 @@ this.onCréditHandler=(Crédit)=> this.setState({Crédit});
 }
 
 
-Submit (){
+Submit =async ()=>{
 
  
 const objet={   
-Cin:this.state.Cin,
-Nom:this.state.Nom,
 Adresse:this.state.Adresse,
 Telephone:this.state.Telephone,
 Email:this.state.Email,
 Crédit:this.state.Crédit,
 
 }
-Alert.alert(
-  "",
-  "Le Client" + " " + this.props.route.params.item.Cin + ' a bien été modifié.' ,
-  [
-    
-    { text: "OK", onPress: () => console.log("OK Pressed") }
-  ]
-);
+let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+
+   if (this.state.Adresse===""){
+    Alert.alert
+    ("Erreur","Entrez l'adresse du client.")
+    this.setState({Adresse:"Entrez l'adresse du client."})
+  }
+  else if (this.state.Adresse.length<4)
+  {
+     Alert.alert 
+     ("Erreur","Le format doit etre comme suit :" +"\n" +"xxxx sousse.")
+    this.setState({Adresse:"Le format doit etre comme suit : xxxx sousse."})}
   
 
-  const _id=this.props.route.params.item._id;
-  const apiUrl='http://192.168.1.2:8080/api/clients';
+  else if (this.state.Telephone===""){
+    Alert.alert
+    ("Erreur","Entrez le numéro du client.")
+    this.setState({Telephone:"Entrez le numéro du client."})}
   
-  fetch(apiUrl + "/" + _id, {
+    else if (this.state.Telephone.length<8 || this.state.Telephone.length>8)
+    {
+       Alert.alert 
+       ("Erreur","Le numéro de téléphone doit contenir 8 chiffres.")
+      this.setState({Telephone:"Le numéro de téléphone doit contenir 8 chiffres."})}
+      
+      else if(this.state.Email==""){
+        alert("Entrez l'Email du client.");
+        this.setState({Email:"Entrez l'Email du client."})
+        
+      }
+      
+      else if(reg.test(this.state.Email) === false)
+      {
+      alert("Email incorrecte.");
+      this.setState({Email:'Email incorrecte.'})
+      return false;
+        }
+      else if (this.state.Crédit===""){
+        Alert.alert
+        ("Erreur","Entrez le montant du crédit.")
+        this.setState({Crédit:"Entrez le montant du crédit."})
+      }
+      else if (this.state.Crédit<0){
+        Alert.alert
+        ("Erreur","Le montant crédit doit etre positif.")
+        this.setState({Crédit:"le montant crédit doit etre positif."})
+      }
+else{
+  const _id=this.props.route.params.item._id;
+  const apiUrl='http://192.168.1.10:8080/api/clients';
+  
+  await fetch(apiUrl + "/" + _id, {
   method:'put',
   mode:'no-cors',
   headers:{
@@ -89,18 +124,49 @@ Alert.alert(
     
   })
 
-})}
-remove(){
+}
+)
+Alert.alert(
+  "",
+  "Le Client" + " " + this.props.route.params.item.Cin + ' a bien été modifié.' ,
+  [
+    
+    { text: "OK", onPress: () => console.log("OK Pressed") }
+  ]
+);
+}}
+remove= async ()=>{
   const _id=this.props.route.params.item._id;
-   const apiUrl='http://192.168.1.2:8080/api/clients';
-  fetch(apiUrl + "/" + _id, {
-    method: 'DELETE',
-    mode:'no-cors',
-  }).then(() => {
-     console.log('removed');
-  }).catch(err => {
-    console.error(err)
-  });
+  const apiUrl='http://192.168.1.10:8080/api/clients';
+  Alert.alert(
+
+    //title
+    'Confirmez votre choix',
+    //body
+    'Voulez-vous vraiment supprimer ce client?',
+    [
+      {
+        text: 'Confirmer',
+        onPress: () =>   fetch(apiUrl + "/" + _id, {
+          method: 'DELETE',
+          mode:'no-cors',
+        }).then(() => {
+          alert("Message de confirmation","Client Supprimé."), this.props.navigation.navigate('listClient');
+        }).catch(err => {
+          console.error(err)
+        })
+      },
+      {
+        text: 'Annuler',
+        onPress: () => console.log('Cancel'), style: 'cancel'
+      },
+    ],
+    {cancelable: false},
+    //clicking out side of alert will not cancel
+  );
+
+
+ 
 }
 
 
@@ -113,27 +179,7 @@ remove(){
  render(){
    
   const { modalVisible } = this.state;
- const alertSupprimer =() => {
-    Alert.alert(
-      //title
-      'Confirmez votre choix',
-      //body
-      'Voulez-vous vraiment supprimer ce client?',
-      [
-        {
-          text: 'Confirmer',
-          onPress: () => console.log('Client supprimer')
-        },
-        {
-          text: 'Annuler',
-          onPress: () => console.log('Cancel'), style: 'cancel'
-        },
-      ],
-      {cancelable: false},
-      //clicking out side of alert will not cancel
-    );
-  
-  }
+
     
     const position=new Animated.ValueXY({x:0,y:0})
     Animated.timing(position,{
@@ -262,7 +308,6 @@ source={require('../img/Client.png')}
                   label='Cin'
                   value={this.props.route.params.item.Cin}
                   keyboardType='numeric'
-                  onChangeText={this.onCinHandler}
                   editable={false}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}
                   
@@ -283,7 +328,6 @@ source={require('../img/Client.png')}
                   defaultValue={this.props.route.params.item.Nom}
                   label='Nom'
                   editable={false}
-                  onChangeText={this.onNomHandler}
                   style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}
               />          
               <View style={{height:1,width:'100%',backgroundColor:'#ccc',marginBottom:5,marginTop:7}}></View>

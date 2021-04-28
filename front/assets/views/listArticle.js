@@ -97,7 +97,7 @@ async componentDidMount() {
     tension: 20,
     useNativeDriver: true
   }).start();
- await fetch ('http://192.168.1.4:8080/api/articles',{
+ await fetch ('http://192.168.1.10:8080/api/articles',{
   method:'get',
   mode:'no-cors',
   headers:{

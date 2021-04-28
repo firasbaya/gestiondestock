@@ -34,10 +34,7 @@ exports.create = (req, res) => {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
-  if (!req.body.QuantiteArticle) {
-    res.status(400).send({ message: "Content can not be empty!" });
-    return;
-  }
+ 
 
   // Create a Article
   const article = new Article({
@@ -49,7 +46,7 @@ exports.create = (req, res) => {
     PrixVente:req.body.PrixVente,
     MaxRemise:req.body.MaxRemise,
     QuantiteAlerte:req.body.QuantiteAlerte,
-    QuantiteArticle:req.body.QuantiteArticle,
+  //  QuantiteArticle:req.body.QuantiteArticle,
     published:req.body.published ? req.body.published : false
   });
 
