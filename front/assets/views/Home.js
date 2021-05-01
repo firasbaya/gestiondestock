@@ -44,7 +44,7 @@ Articles
 Mouvements
 </Text>
 <TouchableOpacity
- onPress={() => {this.props.navigation.navigate('MouvementNav')}}
+ onPress={() => {this.props.navigation.navigate('Mouvements')}}
  >
 <View style={styles.items}>
 
@@ -131,7 +131,7 @@ Divers
 </Text>
 
 <TouchableOpacity
- onPress={() => {this.props.navigation.navigate('Statistique')}}
+ onPress={() => {this.props.navigation.navigate('listClientCredit')}}
  >
 <View style={styles.items}>
 
@@ -161,7 +161,7 @@ Divers
 </TouchableOpacity>
 
 <TouchableOpacity
- onPress={() => {this.props.navigation.navigate('listDépenses')}}
+ onPress={() => {this.props.navigation.navigate('DépensesNav')}}
  >
 <View style={styles.items}>
 

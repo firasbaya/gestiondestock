@@ -6,8 +6,6 @@ import Fournisseur  from './assets/views/Fournisseur';
 import FournisseurNav from './assets/views/FournisseurNav'
 
 import  Sortie from './assets/views/Sortie';
-import listSortie from './assets/views/listSortie';
-import listEntre from './assets/views/listEntre';
 import MouvementNav from './assets/views/MouvementNav'
 
 import Client from './assets/views/Client';
@@ -21,9 +19,10 @@ import MagasinierScreen  from './assets/views/MagasinierScreen';
 import listMagasinier from './assets/views/listMagasinier';
 import ajoutMagasinier from './assets/views/ajoutMagasinier';
 import navMagasinier from './assets/views/navMagasinier';
-
 import Dépense from './assets/views/Dépense';
 import listDépenses from './assets/views/listDépenses';
+import DépensesNav from './assets/views/DépensesNav'
+import supprimerDépense from './assets/views/supprimerDépense' 
 
 import sendMail from './assets/views/sendMail';
 import aPropos from './assets/views/aPropos';
@@ -47,10 +46,11 @@ import DétailFournisseur from './assets/views/DétailFournisseur';
 import DétailMagasinier from './assets/views/DétailMagasinier';
 import DétailSortie from './assets/views/DétailSortie';
 import DétailEntré from './assets/views/DétailEntré';
-import listArticleProduct from './assets/views/listArticleProduct';
 import ajoutEntrée from './assets/views/ajoutEntrée';
 import validerEntrée from './assets/views/validerEntrée';
 import validerSortie from './assets/views/validerSortie';
+import listClientCredit from './assets/views/ListClientCredit';
+import Mouvements from './assets/views/Mouvements';
 const Drawer = createDrawerNavigator();
 const stack = createStackNavigator();
 
@@ -73,6 +73,7 @@ render(){
 <NavigationContainer >
       <stack.Navigator >
      
+      <stack.Screen name="Home" component={MyDrawerHome} options={{headerShown: false}}/>
 
       <stack.Screen name="SplashScreen" component={SplashScreen} options={{headerShown: false}}/>
       <stack.Screen name="LoginScreen" component={LoginScreen} options={{headerShown: false}}/>
@@ -84,7 +85,6 @@ render(){
       headerStyle: { backgroundColor: '#E73E01'}, 
        headerTitleStyle:{fontWeight: 'bold', color:'white'}}}/>
 
-      <stack.Screen name="Home" component={MyDrawerHome} options={{headerShown: false}}/>
       <stack.Screen name="alo" component={DrawerContent} />     
       <stack.Screen name="HomeMag" component={HomeMag} options={{headerShown: false}} />
 
@@ -96,14 +96,13 @@ render(){
        options={{ title:'Nouvel article',headerTintColor: 'white', headerStyle: { backgroundColor: '#E8B200'},
        headerTitleStyle:{fontWeight: 'bold', color:'white'}, 
        }}/>
-      <stack.Screen name="listArticleProduct" component={listArticleProduct}/>
 
-      <stack.Screen name="MouvementNav" component={MouvementNav}
-       options={{headerShown: false}}/>
+      <stack.Screen name="MouvementNav" component={MouvementNav} options={{headerShown: false}}/>
+      <stack.Screen name="Mouvements" component={Mouvements} options={{headerShown: false}}/>
+
        
-       <stack.Screen name="listEntre" component={listEntre}/>
-       <stack.Screen name="listSortie" component={listSortie}/>
        <stack.Screen name="listClient" component={listClient} options={{headerShown: false}}/>
+       <stack.Screen name="listClientCredit" component={listClientCredit} options={{headerShown: false}}/>
 
         <stack.Screen name="ajoutEntrée" component={ajoutEntrée} options={{headerShown: false}}/>
 
@@ -125,7 +124,9 @@ render(){
       <stack.Screen name="Dépense" component={Dépense}/>
       <stack.Screen name="listDépenses" component={listDépenses} options={{ title:'Liste des dépenses',headerTintColor: 'white',
       headerStyle: { backgroundColor: '#2c7373'}, headerTitleStyle:{fontWeight: 'bold', color:'white'}}}/>
-      
+      <stack.Screen name="DépensesNav" component={DépensesNav} options={{headerShown: false}}/>
+      <stack.Screen name="supprimerDépense" component={supprimerDépense} options={{headerShown: false}}/>
+    
     
       <stack.Screen name="navMagasinier" component ={navMagasinier} options={{headerShown: false}}/>
       <stack.Screen name="ajoutMagasinier" component={ajoutMagasinier}/>
@@ -140,10 +141,9 @@ render(){
         <stack.Screen name="DétailMagasinier" component={DétailMagasinier} options={{title:'DétailMagasinier'}}/>
         <stack.Screen name="DétailEntré" component={DétailSortie} options={{headerShown: false}}/>
         <stack.Screen name="DétailSortie" component={DétailEntré} options={{headerShown: false}}/>
-
+       
     <stack.Screen name="Détail Article" component={DétailArticle} options={{headerShown: false}}/>
-
-    </stack.Navigator>
+     </stack.Navigator>
   </NavigationContainer>
  
  

@@ -26,7 +26,7 @@ class Dépense extends React.Component{
       this.setState({Montant:'Entrez le montant.'})
     }
     else {
-     await fetch('http://192.168.1.4:8080/api/depenses',{
+     await fetch('http://192.168.1.10:8080/api/depenses',{
       method:'post',
       mode:'no-cors',
       headers:{

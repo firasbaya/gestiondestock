@@ -11,9 +11,9 @@ import {
   Avatar,
 }from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
-import { MaterialIcons } from '@expo/vector-icons';
 
-class listArticle extends React.Component{
+
+class Listtest extends React.Component{
   
   constructor() {
     super();
@@ -27,30 +27,10 @@ search:'',
 isLoading:true
     }
 }
- //this.props.navigation.navigate('DetailScreen', {item: item})
 
-onPresss = (item) => {
-  const Designation = item.Designation;
-  const Marque = item.Marque;
-  const PrixAchat = item.PrixAchat;
-  const PrixVente = item.PrixVente;
-  const MaxRemise = item.MaxRemise;
-  const QuantiteAlerte = item.QuantiteAlerte;
-  const QuantiteArticle = item.QuantiteArticle;
-  const Id_fournisseur = item.Id_fournisseur;
-   
 
-}
 
-    onPresino(item){
-      this.props.navigation.navigate(
-        'Détail Article',
-        {item},
-    );
-
-   
-}
-
+ 
 renderItem = ({item}) => {
   this.delayValue = this.delayValue + 500;
   const translateX = this.state.animatedValue.interpolate({
@@ -71,8 +51,7 @@ uri:'https://i.ibb.co/xDJ6XBd/Articleimage.jpg'                  }}
                   size={50}
                   />
   <Text style={{marginVertical:10,marginLeft:20,letterSpacing:1.7,fontWeight:'bold',fontSize:20,marginLeft:8}}>{item.Designation}</Text> 
-{/*   <Text style={{marginVertical:10,marginLeft:20,letterSpacing:1.7,fontWeight:'bold',fontSize:20,marginLeft:8}}>{item._id}</Text> 
- */}
+   
   </View>
   </TouchableOpacity>
   
@@ -97,8 +76,9 @@ async componentDidMount() {
     tension: 20,
     useNativeDriver: true
   }).start();
- await fetch ('http://192.168.1.10:8080/api/articles',{
+ await fetch ('http://192.168.1.10:8080/api/articles/',{
   method:'get',
+  Designation:'emira',
   mode:'no-cors',
   headers:{
   'Accept':'application/json',
@@ -123,9 +103,7 @@ async componentDidMount() {
   };
   
   render(){
-    const{navigate}=this.props.navigation;
-    const { data } = this.state;
-    const { search } = this.state;
+ 
     return (
 
 <View style={styles.container}>
@@ -148,7 +126,6 @@ async componentDidMount() {
             
             
           />
-         
 
 </View>
 
@@ -165,4 +142,4 @@ async componentDidMount() {
         },
                        
     });
-    export default listArticle;
+    export default Listtest;

@@ -88,13 +88,18 @@ class validerEntrée extends React.Component{
       "La quantité de l'article" + " " + this.state.dataSource.Designation  + " " + 'a bien été ajouté.' ,
       [
         
-        { text: "OK", onPress: () => console.log("OK Pressed") }
+        { text: "OK", onPress: () => {this.props.navigation.navigate('ajoutEntrée')} },
+        {text: 'Non',onPress: () => console.log('Annulé') }  
+
       ]
+      
     )
     )})
     this.getData();
   
-  }}
+  }
+
+}
  
 
     render(){

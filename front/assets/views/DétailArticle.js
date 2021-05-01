@@ -138,7 +138,7 @@ Alert.alert(
   "L'article" + " " + this.props.route.params.item.Designation + ' a bien été modifié.' ,
   
   [
-    { text: "OK", onPress: () => console.log("OK Pressed") }
+    { text: "OK", onPress: () =>this.props.navigation.navigate('listArticle') }
 
   ]
 );

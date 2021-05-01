@@ -46,7 +46,7 @@ exports.create = (req, res) => {
     PrixVente:req.body.PrixVente,
     MaxRemise:req.body.MaxRemise,
     QuantiteAlerte:req.body.QuantiteAlerte,
-  //  QuantiteArticle:req.body.QuantiteArticle,
+   QuantiteArticle:req.body.QuantiteArticle,
     published:req.body.published ? req.body.published : false
   });
 

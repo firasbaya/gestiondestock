@@ -18,10 +18,10 @@ module.exports = mongoose => {
         },
       
         Crédit:{
-          type:String,
-          default:'0',
-        },
-
+        type:Number,
+      default:0,
+      required:false
+    },
         published:Boolean
       },
       { timestamps: true }

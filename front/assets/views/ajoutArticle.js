@@ -39,7 +39,14 @@ import {globalStyles} from '../Model/globalStyles';
         MaxRemise,
         QuantiteAlerte,
                          }=this.state;
-      if(Designation==""){
+
+                         if (PrixVente<=PrixAchat){
+                          Alert.alert
+                           ("Erreur","Le prix d'achat doit etre inférieur au prix de vente.")
+                         this.setState({prixVente:"Le prix d'achat doit etre inférieur au prix de vente."})
+                       }
+                        
+      else if(Designation==""){
         Alert.alert
           ("Erreur","Entrez la Designation de l'article.");
         this.setState({Designation:"Entrez la Designation de l'article."})
@@ -56,8 +63,8 @@ import {globalStyles} from '../Model/globalStyles';
       }
       else if (Id_fournisseur===""){
         Alert.alert
-        ("Erreur","Entrez l'ID du fournisseur.")
-        this.setState({Id_fournisseur:"Entrez l'ID du fournisseur."})}
+        ("Erreur","Entrez le numéro CIN du fournisseur.")
+        this.setState({Id_fournisseur:"Entrez le numéro CIN du fournisseur."})}
       
         else if (Id_fournisseur.length<8 || Id_fournisseur.length>8)
         {
@@ -87,11 +94,6 @@ import {globalStyles} from '../Model/globalStyles';
      }
       
       
-      else if (PrixVente<PrixAchat){
-        Alert.alert
-         ("Erreur","Le prix de vente doit etre inférieure au prix d'achat.")
-       this.setState({prixVente:"Le prix de vente doit etre inférieure au prix d'achat."})
-     }
       
       else if (MaxRemise===""){
          Alert.alert 
@@ -139,7 +141,7 @@ import {globalStyles} from '../Model/globalStyles';
           "L'article" + " " +Designation + " " + 'a bien été ajouté.' ,
           [
             
-            { text: "OK", onPress: () => console.log("OK Pressed") }
+            { text: "OK", onPress: () => this.props.navigation.navigate('Home') }
           ]
         ))})}}
     render(){

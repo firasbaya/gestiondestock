@@ -11,9 +11,9 @@ import {
   Avatar,
 }from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
+import { MaterialIcons } from '@expo/vector-icons';
 
-
-class listArticleProduct extends React.Component{
+class Mouvements extends React.Component{
   
   constructor() {
     super();
@@ -29,20 +29,11 @@ isLoading:true
 }
  //this.props.navigation.navigate('DetailScreen', {item: item})
 
-onPresss = (item) => {
-  const Designation = item.Designation;
-  const Marque = item.Marque;
-  const PrixAchat = item.PrixAchat;
-  const PrixVente = item.PrixVente;
-  const MaxRemise = item.MaxRemise;
-  const QuantiteAlerte = item.QuantiteAlerte;
-  const QuantiteArticle = item.QuantiteArticle;
-  const Id_fournisseur = item.Id_fournisseur;
+
+
    
 
-}
 
- 
 renderItem = ({item}) => {
   this.delayValue = this.delayValue + 500;
   const translateX = this.state.animatedValue.interpolate({
@@ -54,8 +45,7 @@ renderItem = ({item}) => {
     style={[styles.button, { transform: [{ translateX }] }]}
   >
   <View style={{flex:1}}>
-  <TouchableOpacity
-     onPress={()=>this.onPresino(item)}>
+
   <View style={{flexDirection:'row',padding:10}}> 
   <Avatar.Image
                   source={{
@@ -63,9 +53,9 @@ uri:'https://i.ibb.co/xDJ6XBd/Articleimage.jpg'                  }}
                   size={50}
                   />
   <Text style={{marginVertical:10,marginLeft:20,letterSpacing:1.7,fontWeight:'bold',fontSize:20,marginLeft:8}}>{item.Designation}</Text> 
-   
+{/*   <Text style={{marginVertical:10,marginLeft:20,letterSpacing:1.7,fontWeight:'bold',fontSize:20,marginLeft:8}}>{item._id}</Text> 
+ */}
   </View>
-  </TouchableOpacity>
   
   
   
@@ -121,24 +111,18 @@ async componentDidMount() {
 
 <View style={styles.container}>
 
-<SearchBar
-        placeholder="Tapez ici..."
-        onChangeText={search => { this.setState({ search }) }}
-        value={this.state.search}
-        style={styles.search}
-        round="default"
-        lightTheme="default"
-      />
       
        <FlatList
       pagingEnabled
-            data={this.state.dataSource}
+      
+      data={this.state.dataSource.filter((value)=> value.updatedAt  >value.createdAt)}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index}
             ItemSeparatorComponent={this.renderSeparator}
             
             
           />
+         
 
 </View>
 
@@ -149,10 +133,10 @@ async componentDidMount() {
         container: {
           height: 300,
           flex:1,
-
+marginTop:60,
           backgroundColor: '#FFF',
           borderRadius: 6,
         },
                        
     });
-    export default listArticleProduct;
+    export default Mouvements

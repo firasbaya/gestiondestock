@@ -82,7 +82,7 @@ import { ScrollView } from 'react-native-gesture-handler';
         
   
    else {
-  fetch('http://192.168.1.19:8080/api/fournisseurs',{
+  fetch('http://192.168.1.10:8080/api/fournisseurs',{
     method:'post',
     mode:'no-cors',
     headers:{

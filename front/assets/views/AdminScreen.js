@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native';
@@ -44,7 +45,7 @@ class AdminScreen extends React.Component{
    
 		else{
   
-		await fetch('http://192.168.1.10:8080/api/auth/signin',{
+		await fetch('http://192.168.1.4:8080/api/auth/signin',{
       method:'post',
       mode:'no-cors',
       headers:{
@@ -72,11 +73,17 @@ class AdminScreen extends React.Component{
        else
       {
           // redirect to profile page
-          alert("Successfully Login");
-          this.props.navigation.navigate("Home");
-      }
+          Alert.alert(
+            "Message de confirmation",
+            "Connecté avec succes.",
+         [
+          {text: "OK"},
+          this.props.navigation.navigate("Home") 
+         ]
+    )
+      
        
-		 })
+        }})
 		 .catch((error)=>{
 		 console.error(error);
 		 });

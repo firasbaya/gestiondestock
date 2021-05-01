@@ -6,7 +6,6 @@ import {
   Alert,
   View,
   Button,
-  Keyboard,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -89,7 +88,7 @@ import {globalStyles} from '../Model/globalStyles';
         
   
    else {
-  fetch('http://192.168.1.19:8080/api/clients',{
+  fetch('http://192.168.1.10:8080/api/clients',{
     method:'post',
     mode:'no-cors',
     headers:{

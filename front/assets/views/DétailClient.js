@@ -65,24 +65,24 @@ let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
     ("Erreur","Entrez l'adresse du client.")
     this.setState({Adresse:"Entrez l'adresse du client."})
   }
-  else if (this.state.Adresse.length<4)
+ /*   if (this.state.Adresse.length<4)
   {
      Alert.alert 
      ("Erreur","Le format doit etre comme suit :" +"\n" +"xxxx sousse.")
     this.setState({Adresse:"Le format doit etre comme suit : xxxx sousse."})}
-  
+   */
 
   else if (this.state.Telephone===""){
     Alert.alert
     ("Erreur","Entrez le numéro du client.")
     this.setState({Telephone:"Entrez le numéro du client."})}
   
-    else if (this.state.Telephone.length<8 || this.state.Telephone.length>8)
+ /*    else if (this.state.Telephone.length<8 || this.state.Telephone.length>8)
     {
        Alert.alert 
        ("Erreur","Le numéro de téléphone doit contenir 8 chiffres.")
       this.setState({Telephone:"Le numéro de téléphone doit contenir 8 chiffres."})}
-      
+       */
       else if(this.state.Email==""){
         alert("Entrez l'Email du client.");
         this.setState({Email:"Entrez l'Email du client."})
