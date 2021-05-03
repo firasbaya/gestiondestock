@@ -15,9 +15,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { globalStyles } from '../Model/globalStyles';
 import TextAnimator from '../Model/TextAnimator';
 import * as SMS from 'expo-sms';
-import email from 'react-native-email'
-
-
+import email from 'react-native-email';
+/* import AsyncStorage from '@react-native-async-storage/async-storage';
+ */
 class validerSortie extends React.Component {
   constructor(props) {
     super(props);
@@ -28,16 +28,19 @@ class validerSortie extends React.Component {
       modalVisible:false,
       QuantiteArticle: '',
       dataSource: [],
-
+      Cin:'',
     };
    
     this.Submit = this.Submit.bind(this);
     this.onQuantiteArticleHandler = (QuantiteArticle) => this.setState({ QuantiteArticle });
+    this.onCinHandler = (Cin) => this.setState({ Cin });
+
   }
+  
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible });
   }
-
+  
   async componentDidMount() {
     this.getData()
     
@@ -68,6 +71,44 @@ class validerSortie extends React.Component {
   }
   
   Submit = async () => {
+    
+/*     const storeData = async () => {
+      try {
+        this.setState({token:'abc123'})
+        await AsyncStorage.setItem('nom article', this.state.Designation)
+        await AsyncStorage.setItem('cin client', this.state.Cin)
+        await AsyncStorage.setItem('quantité', this.state.QuantiteArticle)
+     //await AsyncStorage.multiSet([['nom article',this.state.Designation],['token','abc123]])
+      } catch (e) {
+        // saving error
+        console.log(err)
+      }
+    }
+
+    const getDataStored = async ()=>{
+      try{
+        const value=await AsyncStorage.getItem('token')
+        const value=await AsyncStorage.getItem('nom article')
+        const value=await AsyncStorage.getItem('cin client')
+        const value=await AsyncStorage.getItem('quantite ')
+if(value!==null){
+  this.setState({token:value})
+//value previously stored
+}
+if(Designation!== null){
+  this.setState({Designation})
+  //value previously stored
+
+}
+
+}catch(e){
+
+}
+
+      } */
+    
+
+
   
     const { modalVisible } = this.state;
  
@@ -325,12 +366,8 @@ blurRadius={180}
     </ImageBackground>
 
       </Modal>
-          
-          
-          
             </View>
-          
-          </View>
+   </View>
 
         </ImageBackground>
       </ScrollView>

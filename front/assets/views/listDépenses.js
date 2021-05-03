@@ -98,27 +98,42 @@ uri:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAjVBMV
   </View>
   </Animated.View>
   )}
-componentDidMount() {
+  displayData(){
+    return  fetch('http://192.168.1.10:8080/api/depenses')
+    .then((response )=> response.json())
+    .then(responseJson => {
+   this.setState({
+   dataSource: responseJson,
+   isLoading: false,
+    },
+    function() {
+      this.arrayholder = responseJson;
+      }
+      );
+    
+    }
+      )
+      .catch(error => { console.error(error);
+      });
+  }
+
+  componentDidUpdate()
+  {
+    this.displayData()
+  }
+ componentDidMount() {
+   this.getData();
   Animated.spring(this.state.animatedValue, {
     toValue: 1,
     tension: 20,
     useNativeDriver: true
   }).start();
-  return fetch('http://192.168.1.10:8080/api/depenses')
-  .then((response )=> response.json())
-  .then(responseJson => {
- this.setState({
- dataSource: responseJson,
- isLoading: false,
-  },
-  function() {
-    this.arrayholder = responseJson;
-    }
-    );
-    })
-    .catch(error => { console.error(error);
-    });
-    }
+  this.displayData()
+  }
+
+
+
+
     search = text => { console.log(text);
     };
     clear = () => { this.search.clear();
@@ -132,6 +147,29 @@ componentDidMount() {
       });
       }
 
+
+      getData = async () => {
+    const apiUrl='http://192.168.1.10:8080/api/depenses';
+     await fetch(apiUrl,{
+      method:'get',
+      mode:'no-cors',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      }
+     
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          dataSource:responseJson
+        })
+      })
+      .catch((error) =>{
+        console.log(error)
+      })
+  
+    }
   remove= async ()=>{
 
     const _id=this.props.route.params.item._id;
@@ -194,7 +232,6 @@ onChangeText={text => this.SearchFilterFunction(text)} onClear={text => this.Sea
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}
             enableEmptySections={true} style={{ marginTop: 11 }}
-
             ItemSeparatorComponent={this.renderSeparator}
           />
  

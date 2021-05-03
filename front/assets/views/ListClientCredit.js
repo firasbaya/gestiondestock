@@ -11,7 +11,7 @@ import {
   Avatar,
 }from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
-
+import ModalDropdown from 'react-native-modal-dropdown';
   
 class listClientCredit extends React.Component{
   
@@ -141,14 +141,11 @@ await fetch ('http://192.168.1.10:8080/api/clients',{
       />
       
        <FlatList
-      pagingEnabled
-      data={this.state.dataSource.filter((value)=> value.Crédit >0 )}
-      renderItem={this.renderItem}
-            
+            pagingEnabled
+            data={this.state.dataSource.filter((value)=> value.Crédit >0 )}
+            renderItem={this.renderItem}
             keyExtractor={(item, index) => index}
-            ItemSeparatorComponent={this.renderSeparator}
-            
-            
+            ItemSeparatorComponent={this.renderSeparator}          
           />
          
 
