@@ -77,39 +77,78 @@ renderSeparator =() => {
 
    
 
-  componentDidMount() {
-    Animated.spring(this.state.animatedValue, {
-      toValue: 1,
-      tension: 20,
-      useNativeDriver: true
-    }).start();
-    return fetch('http://192.168.1.10:8080/api/fournisseurs')
-    .then((response )=> response.json())
-    .then(responseJson => {
-   this.setState({
-   dataSource: responseJson,
-   isLoading: false,
-    },
-    function() {
-      this.arrayholder = responseJson;
-      }
-      );
+displayData(){
+  return  fetch('http://192.168.1.10:8080/api/fournisseurs')
+  .then((response )=> response.json())
+  .then(responseJson => {
+ this.setState({
+ dataSource: responseJson,
+ isLoading: false,
+  },
+  function() {
+    this.arrayholder = responseJson;
+    }
+    );
+  
+  }
+    )
+    .catch(error => { console.error(error);
+    });
+}
+
+componentDidUpdate()
+{
+  this.displayData()
+}
+componentDidMount() {
+ this.getData();
+Animated.spring(this.state.animatedValue, {
+  toValue: 1,
+  tension: 20,
+  useNativeDriver: true
+}).start();
+this.displayData()
+}
+
+
+
+
+  search = text => { console.log(text);
+  };
+  clear = () => { this.search.clear();
+  };
+  SearchFilterFunction(text) {
+    const newData = this.arrayholder.filter(function(item) { const itemData = item.Titre ? item.Titre.toUpperCase() :
+    ''.toUpperCase();
+    const textData = text.toUpperCase(); return itemData.indexOf(textData) > -1;
+    });
+    this.setState({ dataSource: newData, search: text,
+    });
+    }
+
+
+    getData = async () => {
+  const apiUrl='http://192.168.1.10:8080/api/fournisseurs';
+   await fetch(apiUrl,{
+    method:'get',
+    mode:'no-cors',
+    headers:{
+      'Accept':'application/json',
+      'Content-Type':'application/json'
+    }
+   
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        dataSource:responseJson
       })
-      .catch(error => { console.error(error);
-      });
-      }
-      search = text => { console.log(text);
-      };
-      clear = () => { this.search.clear();
-      };
-      SearchFilterFunction(text) {
-        const newData = this.arrayholder.filter(function(item) { const itemData = item.Nom ? item.Nom.toUpperCase() :
-        ''.toUpperCase();
-        const textData = text.toUpperCase(); return itemData.indexOf(textData) > -1;
-        });
-        this.setState({ dataSource: newData, search: text,
-        });
-        }
+    })
+    .catch((error) =>{
+      console.log(error)
+    })
+
+  }
   
   render(){
     if (this.state.isLoading) { return (

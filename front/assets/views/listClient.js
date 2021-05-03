@@ -75,13 +75,8 @@ renderSeparator =() => {
     </View>
   )
 }
-componentDidMount() {
-  Animated.spring(this.state.animatedValue, {
-    toValue: 1,
-    tension: 20,
-    useNativeDriver: true
-  }).start();
-  return fetch('http://192.168.1.10:8080/api/clients')
+displayData(){
+  return  fetch('http://192.168.1.10:8080/api/clients')
   .then((response )=> response.json())
   .then(responseJson => {
  this.setState({
@@ -92,22 +87,66 @@ componentDidMount() {
     this.arrayholder = responseJson;
     }
     );
-    })
+  
+  }
+    )
     .catch(error => { console.error(error);
     });
+}
+
+componentDidUpdate()
+{
+  this.displayData()
+}
+componentDidMount() {
+ this.getData();
+Animated.spring(this.state.animatedValue, {
+  toValue: 1,
+  tension: 20,
+  useNativeDriver: true
+}).start();
+this.displayData()
+}
+
+
+
+
+  search = text => { console.log(text);
+  };
+  clear = () => { this.search.clear();
+  };
+  SearchFilterFunction(text) {
+    const newData = this.arrayholder.filter(function(item) { const itemData = item.Titre ? item.Titre.toUpperCase() :
+    ''.toUpperCase();
+    const textData = text.toUpperCase(); return itemData.indexOf(textData) > -1;
+    });
+    this.setState({ dataSource: newData, search: text,
+    });
     }
-    search = text => { console.log(text);
-    };
-    clear = () => { this.search.clear();
-    };
-    SearchFilterFunction(text) {
-      const newData = this.arrayholder.filter(function(item) { const itemData = item.Nom ? item.Nom.toUpperCase() :
-      ''.toUpperCase();
-      const textData = text.toUpperCase(); return itemData.indexOf(textData) > -1;
-      });
-      this.setState({ dataSource: newData, search: text,
-      });
-      }
+
+
+    getData = async () => {
+  const apiUrl='http://192.168.1.10:8080/api/clients';
+   await fetch(apiUrl,{
+    method:'get',
+    mode:'no-cors',
+    headers:{
+      'Accept':'application/json',
+      'Content-Type':'application/json'
+    }
+   
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        dataSource:responseJson
+      })
+    })
+    .catch((error) =>{
+      console.log(error)
+    })
+
+  }
 
   render(){
 
@@ -127,9 +166,9 @@ onChangeText={text => this.SearchFilterFunction(text)} onClear={text => this.Sea
 />
 
 <FlatList
-      data={this.state.dataSource}
-      renderItem={this.renderItem}
-          ItemSeparatorComponent={this.renderSeparator}
+data={this.state.dataSource}
+renderItem={this.renderItem}
+ ItemSeparatorComponent={this.renderSeparator}
  enableEmptySections={true} style={{ marginTop: 11 }}
  keyExtractor={(item, index) => index.toString()}
 

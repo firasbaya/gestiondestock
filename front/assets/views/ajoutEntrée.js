@@ -6,6 +6,7 @@ import {
   Text,
   ImageBackground,
   Modal,
+  ActivityIndicator,
   FlatList,
 } from 'react-native'
 //import * as Font from 'expo-font';
@@ -25,8 +26,8 @@ import {
         this.state = {
 Designation:'',
     search:'',
-            /* data: [],
-            refreshing: true, */
+    refreshing: true, 
+ 
             dataSource: [],
     isLoading:true,
     modalVisible: false,
@@ -84,40 +85,47 @@ Designation:'',
         )
       }
       
-      async componentDidMount() {
-
-       await fetch ('http://192.168.1.10:8080/api/articles',{
-        method:'get',
-        mode:'no-cors',
-        headers:{
-        'Accept':'application/json',
-        'Content-Type':'application/json'
+      componentDidMount() {
+        return fetch('http://192.168.1.10:8080/api/articles')
+        .then((response )=> response.json())
+        .then(responseJson => {
+       this.setState({
+       dataSource: responseJson,
+       isLoading: false,
         },
+        function() {
+          this.arrayholder = responseJson;
+          }
+          );
+          })
+          .catch(error => { console.error(error);
+          });
+          }
+          search = text => { console.log(text);
+          };
+          clear = () => { this.search.clear();
+          };
+          SearchFilterFunction(text) {
+            const newData = this.arrayholder.filter(function(item) { const itemData = item.Designation ? item.Designation.toUpperCase() :
+            ''.toUpperCase();
+            const textData = text.toUpperCase(); return itemData.indexOf(textData) > -1;
+            });
+            this.setState({ dataSource: newData, search: text,
+            });
+            }
       
-      })
-        
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          dataSource:responseJson
-        })
-      })
-      .catch((error) =>{
-        console.log(error)
-      }
-      )}
       
-        updateSearch = (search) => {
-          this.setState({ search });
-        };
       
       
     render(){
-        const{navigate}=this.props.navigation;
-        const { data } = this.state;
-        const { search } = this.state;
+      if (this.state.isLoading) { return (
+        <View style={{ flex: 1, paddingTop: 21 }}>
+        <ActivityIndicator />
+        </View>
+        );
+        }
         const { modalVisible } = this.state;
-        const { modalAjoutVisible } = this.state;
+       
        
         return(
             
@@ -174,22 +182,21 @@ uri:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHCBYWFRgWFhYZGBga
 <View style={styles.container}>
 
 
-<SearchBar
-        placeholder="Tapez ici..."
-        onChangeText={search => { this.setState({ search }) }}
-        value={this.state.search}
-        style={styles.search}
-        round="default"
-        lightTheme="default"
-      />
-       <FlatList
-            data={this.state.dataSource}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => index}
-            ItemSeparatorComponent={this.renderSeparator}
-            
-            
-          />
+<SearchBar 
+round="default"
+lightTheme="default"
+searchIcon={{ size: 25 }}
+onChangeText={text => this.SearchFilterFunction(text)} onClear={text => this.SearchFilterFunction('')} placeholder="Tapez ici pour chercher..." value={this.state.search}
+/>
+<View style={{marginBottom:10}}></View>
+      
+      <FlatList
+          data={this.state.dataSource}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          enableEmptySections={true} style={{ marginTop: 11 }}
+          ItemSeparatorComponent={this.renderSeparator}
+        />
 
 </View>
 

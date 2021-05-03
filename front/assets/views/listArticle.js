@@ -11,7 +11,6 @@ import {
   Avatar,
 }from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
-import { MaterialIcons } from '@expo/vector-icons';
 
 class listArticle extends React.Component{
   
@@ -19,28 +18,19 @@ class listArticle extends React.Component{
     super();
     this.delayValue = 8000;
     this.state = {
-      
+      isLoading:true,
+
       animatedValue: new Animated.Value(0),
 search:'',
         refreshing: true,
         dataSource: [],
 isLoading:true
     }
+    this.arrayholder=[]
 }
  //this.props.navigation.navigate('DetailScreen', {item: item})
 
-onPresss = (item) => {
-  const Designation = item.Designation;
-  const Marque = item.Marque;
-  const PrixAchat = item.PrixAchat;
-  const PrixVente = item.PrixVente;
-  const MaxRemise = item.MaxRemise;
-  const QuantiteAlerte = item.QuantiteAlerte;
-  const QuantiteArticle = item.QuantiteArticle;
-  const Id_fournisseur = item.Id_fournisseur;
-   
 
-}
 
     onPresino(item){
       this.props.navigation.navigate(
@@ -71,81 +61,106 @@ uri:'https://i.ibb.co/xDJ6XBd/Articleimage.jpg'                  }}
                   size={50}
                   />
   <Text style={{marginVertical:10,marginLeft:20,letterSpacing:1.7,fontWeight:'bold',fontSize:20,marginLeft:8}}>{item.Designation}</Text> 
-{/*   <Text style={{marginVertical:10,marginLeft:20,letterSpacing:1.7,fontWeight:'bold',fontSize:20,marginLeft:8}}>{item._id}</Text> 
- */}
   </View>
   </TouchableOpacity>
-  
-  
-  
     </View>
     </Animated.View>
     )
   }
-renderSeparator =() => {
-  return(
-    <View
-    style={{height:1,width:'100%',backgroundColor:'#ccc'}}>
 
-    </View>
-  )
-}
+  displayData(){
+    return  fetch('http://192.168.1.10:8080/api/articles')
+    .then((response )=> response.json())
+    .then(responseJson => {
+   this.setState({
+   dataSource: responseJson,
+   isLoading: false,
+    },
+    function() {
+      this.arrayholder = responseJson;
+      }
+      );
+    
+    }
+      )
+      .catch(error => { console.error(error);
+      });
+  }
 
-async componentDidMount() {
-   Animated.spring(this.state.animatedValue, {
+  componentDidUpdate()
+  {
+    this.displayData()
+  }
+ componentDidMount() {
+   this.getData();
+  Animated.spring(this.state.animatedValue, {
     toValue: 1,
     tension: 20,
     useNativeDriver: true
   }).start();
- await fetch ('http://192.168.1.10:8080/api/articles',{
-  method:'get',
-  mode:'no-cors',
-  headers:{
-  'Accept':'application/json',
-  'Content-Type':'application/json'
-  },
+  this.displayData()
+  }
 
-})
+
+
+
+    search = text => { console.log(text);
+    };
+    clear = () => { this.search.clear();
+    };
+    SearchFilterFunction(text) {
+      const newData = this.arrayholder.filter(function(item) { const itemData = item.Designation ? item.Designation.toUpperCase() :
+      ''.toUpperCase();
+      const textData = text.toUpperCase(); return itemData.indexOf(textData) > -1;
+      });
+      this.setState({ dataSource: newData, search: text,
+      });
+      }
+
+
+      getData = async () => {
+    const apiUrl='http://192.168.1.10:8080/api/articles';
+     await fetch(apiUrl,{
+      method:'get',
+      mode:'no-cors',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      }
+     
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          dataSource:responseJson
+        })
+      })
+      .catch((error) =>{
+        console.log(error)
+      })
   
-.then((response) => response.json())
-.then((responseJson) => {
-  this.setState({
-    dataSource:responseJson
-  })
-})
-.catch((error) =>{
-  console.log(error)
-}
-)}
-
-  updateSearch = (search) => {
-    this.setState({ search });
-  };
+    }
   
   render(){
-    const{navigate}=this.props.navigation;
-    const { data } = this.state;
-    const { search } = this.state;
+
     return (
 
 <View style={styles.container}>
 
-<SearchBar
-        placeholder="Tapez ici..."
-        onChangeText={search => { this.setState({ search }) }}
-        value={this.state.search}
-        style={styles.search}
-        round="default"
-        lightTheme="default"
-      />
+<SearchBar 
+round="default"
+lightTheme="default"
+searchIcon={{ size: 25 }}
+onChangeText={text => this.SearchFilterFunction(text)} onClear={text => this.SearchFilterFunction('')} placeholder="Tapez ici pour chercher..." value={this.state.search}
+/>
       
        <FlatList
-      pagingEnabled
             data={this.state.dataSource}
             renderItem={this.renderItem}
-            keyExtractor={(item, index) => index}
+            keyExtractor={(item, index) => index.toString()}
             ItemSeparatorComponent={this.renderSeparator}
-            
+            enableEmptySections={true} style={{ marginTop: 11 }}
+
             
           />
          
@@ -159,7 +174,6 @@ async componentDidMount() {
         container: {
           height: 300,
           flex:1,
-
           backgroundColor: '#FFF',
           borderRadius: 6,
         },

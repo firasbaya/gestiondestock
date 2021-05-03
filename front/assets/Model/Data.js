@@ -11,7 +11,7 @@ export const locations =
                 },
                 
                 {
-                title: 'Sousse', latitude: 35.825603,
+                title: 'Emira', latitude: 35.825603,
                 longitude: 10.608395,
                 markerImage: "https://i.ibb.co/Cnkfx5g/copyright-1.png",
                 weight:13
