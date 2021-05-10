@@ -26,12 +26,12 @@ class listDépenses extends React.Component{
     this.state = {
       search:'', 
       dataSource: [],
-      animatedValue: new Animated.Value(0),
-
+x:0,
         Montant:'',
         Titre:'',
 isLoading:true,
 modalVisible:false,
+isFetching: false,
 
 
     }
@@ -48,6 +48,17 @@ this.arrayholder=[]
     )
 
     }
+   
+    ListEmpty = () => {
+      //View to set in Footer
+      return (
+        <View >
+          <Text>
+              La liste est vide
+          </Text>
+        </View>
+      );
+    };
 
 renderSeparator =() => {
 
@@ -59,16 +70,10 @@ renderSeparator =() => {
   )
 }
 renderItem = ({item}) => {
-  this.delayValue = this.delayValue + 500;
-  const translateX = this.state.animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [this.delayValue,1]
-  });
+
   
   return(
-    <Animated.View
-      style={[styles.button, { transform: [{ translateX }] }]}
-    >
+   
     <View style={{flex:1,}}>
                
     <View style={{flexDirection:'row',padding:10,flex:1}}>
@@ -96,40 +101,49 @@ uri:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAjVBMV
 </View>
             
   </View>
-  </Animated.View>
   )}
-  displayData(){
-    return  fetch('http://192.168.1.10:8080/api/depenses')
+  onRefresh() {
+    this.setState({ isFetching: true,x:0 }, 
+      function() { this.fetchData() });
+  }
+fetchData(){
+
+  fetch('http://192.168.1.10:8080/api/depenses',{
+    method:'get',
+    mode:'no-cors',
+    headers:{
+    'Accept':'application/json',
+    'Content-Type':'application/json'
+    }})
+   
     .then((response )=> response.json())
     .then(responseJson => {
    this.setState({
    dataSource: responseJson,
    isLoading: false,
+   isFetching:false
     },
     function() {
       this.arrayholder = responseJson;
       }
       );
+      for (var i=0; i <responseJson.length; i++){
+        var j=responseJson[i].Montant
+    
+    this.setState({x:this.state.x+j})
+      }
     
     }
       )
       .catch(error => { console.error(error);
       });
+  
   }
 
-  componentDidUpdate()
-  {
-    this.displayData()
-  }
- componentDidMount() {
-   this.getData();
-  Animated.spring(this.state.animatedValue, {
-    toValue: 1,
-    tension: 20,
-    useNativeDriver: true
-  }).start();
-  this.displayData()
-  }
+componentDidMount(){
+  this.fetchData()
+}
+ 
 
 
 
@@ -146,68 +160,9 @@ uri:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAjVBMV
       this.setState({ dataSource: newData, search: text,
       });
       }
-
-
-      getData = async () => {
-    const apiUrl='http://192.168.1.10:8080/api/depenses';
-     await fetch(apiUrl,{
-      method:'get',
-      mode:'no-cors',
-      headers:{
-        'Accept':'application/json',
-        'Content-Type':'application/json'
-      }
      
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          dataSource:responseJson
-        })
-      })
-      .catch((error) =>{
-        console.log(error)
-      })
-  
-    }
-  remove= async ()=>{
-
-    const _id=this.props.route.params.item._id;
-
-     const apiUrl='http://192.168.1.10:8080/api/depenses';
-     Alert.alert(
-   
-       //title
-       'Confirmez votre choix',
-       //body
-       'Voulez-vous vraiment supprimer cet article?',
-       [
-         {
-           text: 'Confirmer',
-           onPress: () =>   fetch(apiUrl + "/" + _id, {
-             method: 'DELETE',
-             mode:'no-cors',
-           }).then(() => {
-             Alert.alert(
-               "Message de confirmation",
-               "Dépense supprimée.",
-               [
-                 
-                 { text: "OK", onPress: () => this.props.navigation.navigate('listDépenses') }
-               ]
-             );         }).catch(err => {
-             console.error(err)
-           })
-         },
-         {
-           text: 'Annuler',
-           onPress: () => console.log('Cancel'), style: 'cancel'
-         },
-       ],
-       {cancelable: false},
-       //clicking out side of alert will not cancel
-     );
-     }
+    
+    
   render(){
     
     if (this.state.isLoading) { return (
@@ -233,8 +188,12 @@ onChangeText={text => this.SearchFilterFunction(text)} onClear={text => this.Sea
             keyExtractor={(item, index) => index.toString()}
             enableEmptySections={true} style={{ marginTop: 11 }}
             ItemSeparatorComponent={this.renderSeparator}
+            ListEmptyComponent={this.ListEmpty}
+            onRefresh={() => this.onRefresh()}
+            refreshing={this.state.isFetching}
+         
           />
- 
+           <Text style={{fontSize:20,fontWeight:'bold',color:'green',marginLeft:10}}>Total : {this.state.x} dt</Text>
 </View>
 
 
@@ -249,5 +208,5 @@ onChangeText={text => this.SearchFilterFunction(text)} onClear={text => this.Sea
       },
                      
   });
-    
+ 
     export default listDépenses;

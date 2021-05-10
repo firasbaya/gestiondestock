@@ -29,6 +29,8 @@ class validerSortie extends React.Component {
       QuantiteArticle: '',
       dataSource: [],
       Cin:'',
+      totalSortie:0,
+      soldeSortie:'',
     };
    
     this.Submit = this.Submit.bind(this);
@@ -116,6 +118,8 @@ if(Designation!== null){
     const objet = {
       Designation: this.state.Designation,
       QuantiteArticle: this.state.QuantiteArticle,
+      totalSortie:this.state.totalSortie,
+    soldeSortie:this.state.soldeSortie,
     }
   
     if (this.state.QuantiteArticle === "") {
@@ -151,7 +155,10 @@ if(Designation!== null){
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          QuantiteArticle: (this.state.dataSource.QuantiteArticle) - Number(objet.QuantiteArticle)
+          QuantiteArticle: (this.state.dataSource.QuantiteArticle) - Number(objet.QuantiteArticle),
+          totalSortie:(this.state.dataSource.totalSortie)+Number(objet.QuantiteArticle),
+          soldeSortie:this.state.dataSource.soldeSortie+(this.state.dataSource.PrixVente)*Number(objet.QuantiteArticle)
+
         },
 
           Alert.alert(
@@ -252,12 +259,12 @@ SMS=async () => {
             />
           </Animated.View>
 
-          <View style={{ height: 520, padding: 20, }}>
+          <View style={{ height: 500, padding: 20, }}>
 
             <TextAnimator
               content="️️️Sortie de marchandises"
               textStyle={[globalStyles.textStyle, { color: '#ffe268', fontSize: 26, }]}
-              style={{ marginTop: 90, }}
+              style={{ marginTop: 120, }}
               duration={800}
 
             />
@@ -285,25 +292,11 @@ SMS=async () => {
                 label='Quantité article'
                 keyboardType='numeric'
                 onChangeText={this.onQuantiteArticleHandler}
-                style={[globalStyles.sousTitre1, { marginTop: 0, marginLeft: 54, color: 'black', borderBottomWidth: 0.7 }]}
+                style={[globalStyles.sousTitre1, { marginTop: 0, marginLeft: 54, color: '#31326f', borderBottomWidth: 0.7 }]}
               />
 
 
-              <View style={[globalStyles.H, { marginLeft: 30, marginTop: 10 }]}>
-                <Image
-                  style={globalStyles.icon}
-                  source={require('../img/card.png')}
-                />
-                <Text style={[globalStyles.sousTitre1, { color: '#ff8303' }]}>CIN Client:</Text>
-
-              </View>
-              <TextInput
-                defaultValue={this.props.route.params.item.Cin}
-                label='Cin'
-                onChangeText={this.onCinHandler}
-                style={[globalStyles.sousTitre1, { marginTop: 0, marginLeft: 54, color: 'black', borderBottomWidth: 0.7 }]}
-                keyboardType='numeric'
-              />
+           
             </View>
 
 

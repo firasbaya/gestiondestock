@@ -53,7 +53,7 @@ modalVisible:false,
                   "Dépense supprimée.",
                   [
                     
-                    { text: "OK", onPress: () => this.props.navigation.navigate('listDépenses') }
+                    { text: "OK", onPress: () => this.props.navigation.navigate('Home') }
                   ]
                 );         }).catch(err => {
                 console.error(err)

@@ -17,8 +17,8 @@ class listFournisseur extends React.Component{
     super(props);
     this.delayValue = 8000;
     this.state = {
-      
-      animatedValue: new Animated.Value(0),
+      x:0,
+
 search:'',
         dataSource: [],
 isLoading:true
@@ -36,16 +36,9 @@ onPresino(item){
    
 }
 renderItem = ({item}) => {
-  this.delayValue = this.delayValue + 500;
-  const translateX = this.state.animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [this.delayValue,1]
-  });
-  
+
 return(
-  <Animated.View
-  style={[styles.button, { transform: [{ translateX }] }]}
->
+  
 <View style={{flex:1,marginLeft:25}}>
 <View style={{flexDirection:'row',padding:10}}> 
 <Avatar.Image
@@ -62,11 +55,21 @@ return(
 </View>
 
   </View>
-  </Animated.View>
   )
 }
+ListEmpty = () => {
+  //View to set in Footer
+  return (
+    <View >
+      <Text style={{marginTop:30,fontSize:22,fontWeight:'bold'}}>
+Aucun fournisseur ne porte ce nom 
+     </Text>
+    </View>
+  );
+};
 
 renderSeparator =() => {
+                  
   return(
     <View
     style={{height:1,width:'100%',backgroundColor:'#ccc'}}>
@@ -74,51 +77,54 @@ renderSeparator =() => {
     </View>
   )
 }
+onRefresh() {
+  this.setState({ isFetching: true,x:0 }, 
+    function() { this.fetchData() });
+}
 
-   
+fetchData(){
 
-displayData(){
-  return  fetch('http://192.168.1.10:8080/api/fournisseurs')
+fetch('http://192.168.1.10:8080/api/fournisseurs',{
+  method:'get',
+  mode:'no-cors',
+  headers:{
+  'Accept':'application/json',
+  'Content-Type':'application/json'
+  }})
+ 
   .then((response )=> response.json())
   .then(responseJson => {
  this.setState({
  dataSource: responseJson,
  isLoading: false,
+ isFetching:false
   },
   function() {
     this.arrayholder = responseJson;
     }
     );
+    for (var i=0; i <=responseJson.length; i++){
+  
+      this.setState({x:i})
+    }
   
   }
     )
     .catch(error => { console.error(error);
     });
+
 }
 
-componentDidUpdate()
-{
-  this.displayData()
+componentDidMount(){
+this.fetchData()
 }
-componentDidMount() {
- this.getData();
-Animated.spring(this.state.animatedValue, {
-  toValue: 1,
-  tension: 20,
-  useNativeDriver: true
-}).start();
-this.displayData()
-}
-
-
-
-
+   
   search = text => { console.log(text);
   };
   clear = () => { this.search.clear();
   };
   SearchFilterFunction(text) {
-    const newData = this.arrayholder.filter(function(item) { const itemData = item.Titre ? item.Titre.toUpperCase() :
+    const newData = this.arrayholder.filter(function(item) { const itemData = item.nom ? item.nom.toUpperCase() :
     ''.toUpperCase();
     const textData = text.toUpperCase(); return itemData.indexOf(textData) > -1;
     });
@@ -127,28 +133,7 @@ this.displayData()
     }
 
 
-    getData = async () => {
-  const apiUrl='http://192.168.1.10:8080/api/fournisseurs';
-   await fetch(apiUrl,{
-    method:'get',
-    mode:'no-cors',
-    headers:{
-      'Accept':'application/json',
-      'Content-Type':'application/json'
-    }
-   
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.setState({
-        dataSource:responseJson
-      })
-    })
-    .catch((error) =>{
-      console.log(error)
-    })
 
-  }
   
   render(){
     if (this.state.isLoading) { return (
@@ -174,9 +159,13 @@ onChangeText={text => this.SearchFilterFunction(text)} onClear={text => this.Sea
             ItemSeparatorComponent={this.renderSeparator}
             enableEmptySections={true} style={{ marginTop: 11 }}
             keyExtractor={(item, index) => index.toString()}
-           
+            ListEmptyComponent={this.ListEmpty}
+            onRefresh={() => this.onRefresh()}
+            refreshing={this.state.isFetching}
+  
           />
-         
+                   <Text style={{fontSize:20,fontWeight:'bold'}}>Total fournisseurs: {this.state.x}</Text>
+
 
 </View>
 

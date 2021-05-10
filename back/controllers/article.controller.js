@@ -26,14 +26,30 @@ exports.create = (req, res) => {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
-   if (!req.body.MaxRemise) {
-    res.status(400).send({ message: "Content can not be empty!" });
-    return;
-  }
+  
    if (!req.body.QuantiteAlerte) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
+  } if (!req.body.totalSortie) {
+    res.status(400).send({ message: "Content can not be empty!" });
+    return;
   }
+if (!req.body.soldeSortie) {
+  res.status(400).send({ message: "Content can not be empty!" });
+  return;
+}
+if (!req.body.soldeEntre) {
+  res.status(400).send({ message: "Content can not be empty!" });
+  return;
+}
+if (!req.body.totalEntre) {
+  res.status(400).send({ message: "Content can not be empty!" });
+  return;
+}
+
+
+  
+  
  
 
   // Create a Article
@@ -44,9 +60,13 @@ exports.create = (req, res) => {
     Id_fournisseur:req.body.Id_fournisseur,
     PrixAchat:req.body.PrixAchat,
     PrixVente:req.body.PrixVente,
-    MaxRemise:req.body.MaxRemise,
     QuantiteAlerte:req.body.QuantiteAlerte,
    QuantiteArticle:req.body.QuantiteArticle,
+   totalSortie: req.body.totalSortie,
+   totalEntre: req.body.totalEntre,
+
+   soldeSortie: req.body.soldeSortie,
+   soldeEntre: req.body.soldeEntre,
     published:req.body.published ? req.body.published : false
   });
 

@@ -11,7 +11,7 @@ import MouvementNav from './assets/views/MouvementNav'
 import Client from './assets/views/Client';
 import listClient from './assets/views/listClient';
 import ClientNav from './assets/views/ClientNav';
-
+import statistiqueClient from './assets/Model/statistiqueClient'
 import ajoutArticle from './assets/views/ajoutArticle';
 import listArticle from './assets/views/listArticle';
 import SplashScreen from './assets/views/SplashScreen';
@@ -33,7 +33,7 @@ import LoginScreen from './assets/views/LoginScreen';
 import AdminScreen from './assets/views/AdminScreen';
 import MdpOubliéScreen from './assets/views/MdpOubliéScreen';
 import SignUpScreen from './assets/views/SignUpScreen';
-
+import Test from './assets/views/Test'
 import { NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from'@react-navigation/stack';
@@ -51,6 +51,10 @@ import validerEntrée from './assets/views/validerEntrée';
 import validerSortie from './assets/views/validerSortie';
 import listClientCredit from './assets/views/ListClientCredit';
 import Mouvements from './assets/views/Mouvements';
+import statClient from './assets/Model/statClient';
+import interfaceEntre from './assets/Model/interfaceEntre';
+import interfaceSortie from './assets/Model/interfaceSortie';
+import interfaceVendu from './assets/Model/interfaceVendu';
 const Drawer = createDrawerNavigator();
 const stack = createStackNavigator();
 
@@ -141,8 +145,14 @@ render(){
         <stack.Screen name="DétailMagasinier" component={DétailMagasinier} options={{title:'DétailMagasinier'}}/>
         <stack.Screen name="DétailEntré" component={DétailSortie} options={{headerShown: false}}/>
         <stack.Screen name="DétailSortie" component={DétailEntré} options={{headerShown: false}}/>
-       
+       <stack.Screen name="Test" component={Test}/>
     <stack.Screen name="Détail Article" component={DétailArticle} options={{headerShown: false}}/>
+    <stack.Screen name="statClient" component={statClient} options={{headerShown:false}}/>
+    <stack.Screen name="statistiqueClient" component={statistiqueClient} options={{headerShown:false}}/>
+    <stack.Screen name="interfaceEntre" component={interfaceEntre} options={{title:'Quantité entrante par article'}}/>
+    <stack.Screen name="interfaceSortie" component={interfaceSortie} options={{title:'Quantité Sortante par article'}}/>
+    <stack.Screen name="interfaceVendu" component={interfaceVendu} options={{headerShown: false}}/>
+
      </stack.Navigator>
   </NavigationContainer>
  

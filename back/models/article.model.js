@@ -27,10 +27,7 @@ module.exports = mongoose => {
       type:Number,
       required:true
     },
-    MaxRemise:{
-      type:Number,
-      required:true
-    },
+ 
     QuantiteAlerte:{
       type:Number,
       required:true
@@ -40,6 +37,30 @@ module.exports = mongoose => {
       default:0,
       required:false
     },
+    totalSortie:{
+      type:Number,
+      default:0,
+      required:false
+    },
+    soldeSortie:{
+      type:Number,
+      default:0,
+      required:false
+    },
+    
+    soldeEntre:{
+      type:Number,
+      default:0,
+      required:false
+    },
+    totalEntre:{
+      type:Number,
+      default:0,
+      required:false
+    },
+    
+    
+
   
         published:Boolean
       },

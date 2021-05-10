@@ -22,6 +22,8 @@ class validerEntrée extends React.Component{
           Designation:'',
           QuantiteArticle:'',
           dataSource : [],
+          Total:'',
+          totalEntre:0,
         };
     
     this.Submit=this.Submit.bind(this);
@@ -58,6 +60,8 @@ class validerEntrée extends React.Component{
       const  objet={   
       Designation:this.state.Designation,
       QuantiteArticle:this.state.QuantiteArticle,
+      Total:this.state.Total,
+      totalEntre:this.state.totalEntre
    }
    if (this.state.QuantiteArticle===""){
     Alert.alert
@@ -80,7 +84,9 @@ class validerEntrée extends React.Component{
         'Content-Type':'application/json'
       },
       body:JSON.stringify({
-        QuantiteArticle: Number(objet.QuantiteArticle) + this.state.dataSource.QuantiteArticle
+        QuantiteArticle: Number(objet.QuantiteArticle) + this.state.dataSource.QuantiteArticle,
+        soldeEntre:this.state.dataSource.soldeEntre-(this.state.dataSource.PrixAchat)*Number(objet.QuantiteArticle),
+      totalEntre:(this.state.dataSource.totalEntre)+Number(objet.QuantiteArticle),
       },
     
       Alert.alert(

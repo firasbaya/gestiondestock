@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Text,
   Animated,
+  ActivityIndicator,
 } from 'react-native'
 import {
   Avatar,
@@ -19,12 +20,10 @@ class listArticle extends React.Component{
     this.delayValue = 8000;
     this.state = {
       isLoading:true,
-
-      animatedValue: new Animated.Value(0),
+      x:0,
 search:'',
-        refreshing: true,
+        isFetching: false,
         dataSource: [],
-isLoading:true
     }
     this.arrayholder=[]
 }
@@ -42,15 +41,9 @@ isLoading:true
 }
 
 renderItem = ({item}) => {
-  this.delayValue = this.delayValue + 500;
-  const translateX = this.state.animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [this.delayValue,1]
-  });
+
   return(
-    <Animated.View
-    style={[styles.button, { transform: [{ translateX }] }]}
-  >
+  
   <View style={{flex:1}}>
   <TouchableOpacity
      onPress={()=>this.onPresino(item)}>
@@ -64,45 +57,73 @@ uri:'https://i.ibb.co/xDJ6XBd/Articleimage.jpg'                  }}
   </View>
   </TouchableOpacity>
     </View>
-    </Animated.View>
     )
   }
 
-  displayData(){
-    return  fetch('http://192.168.1.10:8080/api/articles')
+
+  onRefresh() {
+    this.setState({ isFetching: true,x:0 }, 
+      function() { this.fetchData() });
+  }
+fetchData(){
+
+  fetch('http://192.168.1.10:8080/api/articles',{
+    method:'get',
+    mode:'no-cors',
+    headers:{
+    'Accept':'application/json',
+    'Content-Type':'application/json'
+    }})
+   
     .then((response )=> response.json())
     .then(responseJson => {
    this.setState({
    dataSource: responseJson,
    isLoading: false,
+   isFetching:false
     },
     function() {
       this.arrayholder = responseJson;
       }
       );
+      for (var i=0; i <=responseJson.length; i++){
+    
+    this.setState({x:i})
+      }
     
     }
       )
       .catch(error => { console.error(error);
       });
+  
   }
 
-  componentDidUpdate()
-  {
-    this.displayData()
-  }
- componentDidMount() {
-   this.getData();
-  Animated.spring(this.state.animatedValue, {
-    toValue: 1,
-    tension: 20,
-    useNativeDriver: true
-  }).start();
-  this.displayData()
-  }
+componentDidMount(){
+  this.fetchData()
+}
+ 
 
 
+  ListEmpty = () => {
+    //View to set in Footer
+    return (
+      <View >
+                            <Text style={{marginTop:30,fontSize:25,fontWeight:'bold'}}>
+        Aucun article ne porte cette designation 
+        </Text>
+      </View>
+    );
+  };
 
+renderSeparator =() => {
+
+return(
+  <View
+  style={{height:1,width:'100%',backgroundColor:'#ccc'}}>
+
+  </View>
+)
+}
 
     search = text => { console.log(text);
     };
@@ -118,31 +139,14 @@ uri:'https://i.ibb.co/xDJ6XBd/Articleimage.jpg'                  }}
       }
 
 
-      getData = async () => {
-    const apiUrl='http://192.168.1.10:8080/api/articles';
-     await fetch(apiUrl,{
-      method:'get',
-      mode:'no-cors',
-      headers:{
-        'Accept':'application/json',
-        'Content-Type':'application/json'
-      }
-     
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          dataSource:responseJson
-        })
-      })
-      .catch((error) =>{
-        console.log(error)
-      })
-  
-    }
   
   render(){
-
+    if (this.state.isLoading) { return (
+      <View style={{ flex: 1, paddingTop: 21 }}>
+      <ActivityIndicator />
+      </View>
+      );
+      }
     return (
 
 <View style={styles.container}>
@@ -160,11 +164,13 @@ onChangeText={text => this.SearchFilterFunction(text)} onClear={text => this.Sea
             keyExtractor={(item, index) => index.toString()}
             ItemSeparatorComponent={this.renderSeparator}
             enableEmptySections={true} style={{ marginTop: 11 }}
-
+            ListEmptyComponent={this.ListEmpty}
+            onRefresh={() => this.onRefresh()}
+            refreshing={this.state.isFetching}
             
           />
          
-
+<Text style={{fontSize:20,fontWeight:'bold'}}>Total articles: {this.state.x}</Text>
 </View>
 
 

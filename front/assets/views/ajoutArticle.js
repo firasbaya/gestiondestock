@@ -40,13 +40,8 @@ import {globalStyles} from '../Model/globalStyles';
         QuantiteAlerte,
                          }=this.state;
 
-                         if (PrixVente<=PrixAchat){
-                          Alert.alert
-                           ("Erreur","Le prix d'achat doit etre inférieur au prix de vente.")
-                         this.setState({prixVente:"Le prix d'achat doit etre inférieur au prix de vente."})
-                       }
                         
-      else if(Designation==""){
+       if(Designation==""){
         Alert.alert
           ("Erreur","Entrez la Designation de l'article.");
         this.setState({Designation:"Entrez la Designation de l'article."})
@@ -116,6 +111,11 @@ import {globalStyles} from '../Model/globalStyles';
         this.setState({QuantiteAlerte:"La quantité d'alerte doit etre positive."})
       }
    
+    else  if (PrixVente<=PrixAchat){
+        Alert.alert
+         ("Erreur","Le prix d'achat doit etre inférieur au prix de vente.")
+       this.setState({prixVente:"Le prix d'achat doit etre inférieur au prix de vente."})
+     }
       
       else {
         await fetch('http://192.168.1.10:8080/api/articles',{

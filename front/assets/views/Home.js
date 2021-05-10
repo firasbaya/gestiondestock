@@ -175,6 +175,21 @@ Divers
 
  </View>
  </TouchableOpacity>
+ <TouchableOpacity
+ onPress={() => {this.props.navigation.navigate('statClient')}}
+ >
+<View style={styles.items}>
+
+  <Image
+    style={styles.imageAdmin}
+    source={require('../img/money.png')}
+    />
+   
+    <Text style={[styles.textIdent,{marginBottom:30}]}>Test</Text> 
+
+
+ </View>
+ </TouchableOpacity>
 
 </ScrollView>
 </View>

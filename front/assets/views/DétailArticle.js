@@ -36,7 +36,6 @@ Categorie:'',
 Id_fournisseur:this.setState({Id_fournisseur:''}),
 PrixAchat:this.setState({PrixAchat:''}),
 PrixVente:this.setState({PrixVente:''}),
-MaxRemise:this.setState({MaxRemise:''}),
 QuantiteAlerte:this.setState({QuantiteAlerte:''}),
 QuantiteArticle:this.setState({QuantiteArticle:''}),
 modalVisible: false,
@@ -47,7 +46,6 @@ this.Submit=this.Submit.bind(this);
 this.onId_fournisseurHandler= (Id_fournisseur) => this.setState({Id_fournisseur});
 this.onPrixAchatHandler= (PrixAchat)=> this.setState({PrixAchat});
 this.onPrixVenteHandler= (PrixVente) => this.setState({PrixVente});
-this.onMaxRemiseHandler= (MaxRemise) => this.setState({MaxRemise});
 this.onQuantiteAlerteHandler= (QuantiteAlerte) => this.setState({QuantiteAlerte});
 this.onQuantiteArticleHandler= (QuantiteArticle) => this.setState({QuantiteArticle});
 }
@@ -57,7 +55,6 @@ Submit =async ()=>{
   Id_fournisseur:this.state.Id_fournisseur,
   PrixAchat:this.state.PrixAchat,
   PrixVente:this.state.PrixVente,
-  MaxRemise:this.state.MaxRemise,
   QuantiteAlerte:this.state.QuantiteAlerte,
   QuantiteArticle:this.state.QuantiteArticle,
 
@@ -67,11 +64,7 @@ if (this.state.QuantiteArticle===""){
   ("Erreur","Entrez la quantité d'article.")
   this.setState({QuantiteArticle:"Entrez la quantité d'article."})
 }
-else if (this.state.MaxRemise===""){
-  Alert.alert
-  ("Erreur","Entrez le taux de remise.")
-  this.setState({MaxRemise:"Entrez le taux de remise."})
-}
+
 else if (this.state.Id_fournisseur===""){
   Alert.alert
   ("Erreur","Entrez le numéro CIN du fournisseur.")
@@ -125,7 +118,6 @@ await fetch(apiUrl + "/" + _id, {
     Id_fournisseur:objet.Id_fournisseur,
     PrixAchat:objet.PrixAchat,
     PrixVente:objet.PrixVente,
-    MaxRemise:objet.MaxRemise,
     QuantiteAlerte:objet.QuantiteAlerte,
     QuantiteArticle:objet.QuantiteArticle
   })
@@ -260,7 +252,7 @@ style={{width:150,height:150,borderRadius:50}}
 source={require('../img/Articleimagee.jpg')}/>
            </Animated.View>
      
-<View style={{height:1040,padding:20,}}>
+<View style={{height:970,padding:20,}}>
 
 
 <TextAnimator
@@ -327,7 +319,7 @@ style={{width:150,height:150,borderRadius:50}}
 source={require('../img/Articleimagee.jpg')}                    />
            </Animated.View>
      
-<View style={{height:1060,padding:20,}}>
+<View style={{height:1000,padding:20,}}>
 
 
 <TextAnimator
@@ -423,20 +415,7 @@ source={require('../img/Articleimagee.jpg')}                    />
                   style={[globalStyles.TextInput,{fontSize:20,fontWeight:'bold',color:'#31326f'}]}
                   keyboardType='numeric'
                 />             
-                      <View style={[globalStyles.H,{marginLeft:30,marginTop:10}]}>
-                <Image
-                      style={globalStyles.icon}
-                      source={require('../img/money.png')}
-                />
-        <Text style={[globalStyles.sousTitre1,{color:'#ff8303'}]}>Remise:</Text>
-       </View>
-                 <TextInput
-                  defaultValue={this.props.route.params.item.MaxRemise.toString()}
-                  label='Prix de vente'
-                  onChangeText={this.onMaxRemiseHandler}
-                  style={[globalStyles.TextInput,{fontSize:20,fontWeight:'bold',color:'#31326f'}]}
-                  keyboardType='numeric'
-                />             
+                      
       
       <View style={[globalStyles.H,{marginLeft:30,marginTop:10}]}>
                 <Image
@@ -673,15 +652,7 @@ source={{uri:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMTEhU
                 <Text style={[globalStyles.sousTitre1,{color:'#ff8303'}]}>Prix de vente:</Text>
               </View>
               <Text style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}> {this.props.route.params.item.PrixVente} </Text>
-              <View style={{height:1,width:'100%',backgroundColor:'#ccc',marginBottom:5,marginTop:7}}></View>
-<View style={[globalStyles.H,{marginLeft:30}]}>
-                <Image
-                      style={globalStyles.icon}
-                      source={require('../img/money.png')}
-                />    
-                                <Text style={[globalStyles.sousTitre1,{color:'#ff8303'}]}>Remise:</Text>
-              </View>
-              <Text style={[globalStyles.sousTitre1,{marginTop:0,marginLeft:54,color:'#31326f'}]}> {this.props.route.params.item.MaxRemise} </Text>
+
               <View style={{height:1,width:'100%',backgroundColor:'#ccc',marginBottom:5,marginTop:7}}></View>
 <View style={[globalStyles.H,{marginLeft:30}]}>
                 <Image

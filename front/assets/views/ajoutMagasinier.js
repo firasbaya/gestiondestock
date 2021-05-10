@@ -22,7 +22,7 @@ import {globalStyles} from '../Model/globalStyles';
         cin:'',
         telephone:'',
         adresse:'',
-       
+       roles:["user"]
       };
       this.Submit=this.Submit.bind(this);
     }
@@ -34,6 +34,7 @@ import {globalStyles} from '../Model/globalStyles';
         cin,
         telephone,
         adresse,
+        roles,
                                 }=this.state;
 
   let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
@@ -112,6 +113,7 @@ import {globalStyles} from '../Model/globalStyles';
           cin,
           telephone,
           adresse,
+          roles,
         },
         Alert.alert(
           "",
@@ -206,6 +208,7 @@ import {globalStyles} from '../Model/globalStyles';
                 <Text style={globalStyles.sousTitre1}>E-mail</Text>
             </View>
             <TextInput
+
             placeholder='FamilyBusiness@gmail.com'
             style={globalStyles.TextInput}
             onChangeText={email => this.setState({email})}
@@ -230,6 +233,23 @@ import {globalStyles} from '../Model/globalStyles';
           />
         
      </View>
+     <View style={globalStyles.E}>
+            <View style={globalStyles.H}>
+                <Image
+                      style={globalStyles.icon}
+                      source={require('../img/placeholder.png')}
+                />
+                <Text style={globalStyles.sousTitre}>Role:</Text>
+                <TextInput
+                
+            placeholder='Magasinier'
+            style={globalStyles.sousTitre}
+            placeholderTextColor='blue'
+value={this.roles}
+          />
+            </View>
+           
+          </View>
        
     <Button title='Ajouter' 
                  onPress={() => this.Submit()}

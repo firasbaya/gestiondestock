@@ -6,57 +6,67 @@ import {
   TouchableOpacity,
   Text,
   Animated,
+  ActivityIndicator
 } from 'react-native'
-import {Avatar}from 'react-native-paper';
+import {
+  Avatar,
+}from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
 
-
+  
 class listMagasinier extends React.Component{
   
-  constructor() {
-    super();
-    this.delayValue = 8000;
+  constructor(props) {
+    super(props);
     this.state = {
       
-      animatedValue: new Animated.Value(0),
 search:'',
-        refreshing: true,
+isLoading:true,
+isFetching: false,
+
         dataSource: [],
-isLoading:true
     }
-}
-
-onPresss = (item) => {
-   const Cin=item.Cin;
-  const Nom = item.Nom;
-  const Adresse = item.Adresse;
-  const Téléphone= item.Téléphone;
-  const Email = item.Email;
-  const Password = item.Password;
-
+    this.arrayholder=[]
 
 }
+
+
 
 onPresino(item){
+ 
   this.props.navigation.navigate(
-    'DétailMagasinier',
-    {item},
-);
+    'DétailClient',
+    {item}
+    
 
-   
-}
-renderItem = ({item}) => {
-  this.delayValue = this.delayValue + 500;
-  const translateX = this.state.animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [this.delayValue,1]
-  });
+  )
   
+  }
+  ListEmpty = () => {
+    //View to set in Footer
+    return (
+      <View >
+        <Text>
+            La liste est vide
+        </Text>
+      </View>
+    );
+  };
+  renderSeparator =() => {
+
+    return(
+      <View
+      style={{height:1,width:'100%',backgroundColor:'#ccc'}}>
+  
+      </View>
+    )
+  }
+renderItem = ({item}) => {  
 return(
-  <Animated.View
-  style={[styles.button, { transform: [{ translateX }] }]}
->
+
 <View style={{flex:1,marginLeft:25}}>
+  <TouchableOpacity
+   onPress={()=>this.onPresino(item)}>
 <View style={{flexDirection:'row',padding:10}}> 
 <Avatar.Image
                 source={{
@@ -64,85 +74,93 @@ return(
                 }}
                 size={50}
                 />
- <TouchableOpacity 
- onPress={()=>this.onPresino(item)}>
-<Text style={{marginVertical:10,marginLeft:20,letterSpacing:1.7,fontWeight:'bold',fontSize:20,marginLeft:8}}>{item.Nom}</Text> 
- </TouchableOpacity>
+<Text style={{marginVertical:10,marginLeft:20,letterSpacing:1.7,fontWeight:'bold',fontSize:20,marginLeft:8}}>{item.nom}</Text> 
  
 </View>
-
+</TouchableOpacity>
 
   </View>
-  </Animated.View>
-  )
-}
-renderSeparator =() => {
-  return(
-    <View
-    style={{height:1,width:'100%',backgroundColor:'#ccc'}}>
-
-    </View>
   )
 }
 
-async componentDidMount() {
-   Animated.spring(this.state.animatedValue, {
-    toValue: 1,
-    tension: 20,
-    useNativeDriver: true
-  }).start();
 
-await fetch ('http://192.168.1.10:8080/api/magasiniers',{
-  method:'get',
-  mode:'no-cors',
-  headers:{
-  'Accept':'application/json',
-  'Content-Type':'application/json'
-  },
+   
 
-})
+  fetchData(){
+    fetch('http://192.168.1.10:8080/api/test/all',{
+      method:'get',
+      mode:'no-cors',
+      headers:{
+      'Accept':'application/json',
+      'Content-Type':'application/json'
+      }})
+    .then((response )=> response.json())
+    .then(responseJson => {
+   this.setState({
+   dataSource: responseJson,
+   isLoading: false,
+   isfetching:false,
+    },
+    function() {
+      this.arrayholder = responseJson;
+      }
+      );
+    
+    }
+      )
+      .catch(error => { console.error(error);
+      });
+  }
   
-.then((response) => response.json())
-.then((responseJson) => {
-  this.setState({
-    dataSource:responseJson
-  })
-})
-.catch((error) =>{
-  console.log(error)
+componentDidMount(){
+  this.fetchData()
 }
-)}
-
-  updateSearch = (search) => {
-    this.setState({ search });
-  };
-  
+search = text => { console.log(text);
+};
+clear = () => { this.search.clear();
+};
+SearchFilterFunction(text) {
+  const newData = this.arrayholder.filter(function(item) { const itemData = item.nom ? item.nom.toUpperCase() :
+  ''.toUpperCase();
+  const textData = text.toUpperCase(); return itemData.indexOf(textData) > -1;
+  });
+  this.setState({ dataSource: newData, search: text,
+  });
+  }
+  onRefresh() {
+    this.setState({ isFetching: true }, 
+      function() { this.fetchData() });
+  }
   render(){
-    const{navigate}=this.props.navigation;
-    const { data } = this.state;
-    const { search } = this.state;
+    if (this.state.isLoading) { return (
+      <View style={{ flex: 1, paddingTop: 21 }}>
+      <ActivityIndicator />
+      </View>
+      );
+      }
+ 
     return (
 
 <View style={styles.container}>
 
-<SearchBar
-        placeholder="Tapez ici..."
-        onChangeText={search => { this.setState({ search }) }}
-        value={this.state.search}
-        style={styles.search}
-        round="default"
-        lightTheme="default"
-      />
+<SearchBar 
+round="default"
+lightTheme="default"
+searchIcon={{ size: 25 }}
+onChangeText={text => this.SearchFilterFunction(text)} onClear={text => this.SearchFilterFunction('')} placeholder="Tapez ici pour chercher..." value={this.state.search}
+/>
       
        <FlatList
-      pagingEnabled
-            data={this.state.dataSource}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => index}
-            ItemSeparatorComponent={this.renderSeparator}
-            
-            
+      data={this.state.dataSource.filter((value)=> value.nom )}
+      renderItem={this.renderItem}
+      keyExtractor={(item, index) => index.toString()}
+      enableEmptySections={true} style={{ marginTop: 11 }}
+      ItemSeparatorComponent={this.renderSeparator}
+      ListEmptyComponent={this.ListEmpty}
+      onRefresh={() => this.onRefresh()}
+      refreshing={this.state.isFetching}
           />
+         
 
 </View>
 
@@ -159,4 +177,4 @@ await fetch ('http://192.168.1.10:8080/api/magasiniers',{
         },
                        
     });
-    export default listMagasinier
+    export default listMagasinier;
